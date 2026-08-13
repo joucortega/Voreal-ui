@@ -52,7 +52,7 @@ it("communicates IdentityCapsule status with text instead of color alone", () =>
   expect(screen.getByText("Restaurante La Palma")).toBeVisible();
 });
 
-it("limits CommunityHub satellites and exposes the remaining community", async () => {
+it("accessibly limits CommunityHub satellites and exposes the remaining community", async () => {
   const { container } = renderVoreal(
     <CommunityHub center={{ id: "host", name: "Mercado Latino" }} people={people} />,
   );

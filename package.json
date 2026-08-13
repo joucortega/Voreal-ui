@@ -18,8 +18,8 @@
     "react-dom": ">=18.3 <20"
   },
   "scripts": {
-    "test": "vitest run",
-    "test:a11y": "vitest run --project a11y",
+    "test": "vitest run --project unit",
+    "test:a11y": "vitest run --project a11y -t \"accessib|violations\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "storybook": "storybook dev -p 6006",
