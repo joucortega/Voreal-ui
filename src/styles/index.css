@@ -18,6 +18,9 @@
 @import "../components/button/button.css" layer(vr-components);
 @import "../components/avatar/avatar.css" layer(vr-components);
 @import "../components/form/form.css" layer(vr-components);
+@import "../components/navigation/navigation.css" layer(vr-components);
+@import "../components/overlay/overlay.css" layer(vr-components);
+@import "../components/feedback/feedback.css" layer(vr-components);
 
 @theme inline {
   --color-vr-canvas: var(--vr-canvas);
