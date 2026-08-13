@@ -7,4 +7,5 @@ export * from "./components/overlay";
 export * from "./components/feedback";
 export * from "./components/content";
 export * from "./components/data";
+export * from "./patterns/directory";
 export { cn } from "./utilities/cn";

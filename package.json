@@ -24,6 +24,7 @@
     "build": "tsc -p tsconfig.build.json",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "test:e2e": "playwright test",
     "lint:css": "stylelint 'src/**/*.css'",
     "audit:css": "node scripts/audit-css.mjs"
   },
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^3.0.0",
+    "@playwright/test": "1.62.1",
     "@storybook/addon-a11y": "^10.5.7",
     "@storybook/react-vite": "^10.5.7",
     "@tailwindcss/vite": "^4.3.3",
