@@ -16,6 +16,7 @@
 @import "./print.css" layer(vr-base);
 @import "../primitives/primitives.css" layer(vr-components);
 @import "../components/button/button.css" layer(vr-components);
+@import "../components/avatar/avatar.css" layer(vr-components);
 
 @theme inline {
   --color-vr-canvas: var(--vr-canvas);

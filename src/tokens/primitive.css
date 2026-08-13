@@ -35,6 +35,7 @@
   --vr-shadow-2: 0 8px 24px rgb(7 27 70 / 10%), 0 2px 8px rgb(7 27 70 / 7%);
   --vr-shadow-3: 0 18px 48px rgb(7 27 70 / 14%), 0 6px 18px rgb(7 27 70 / 8%);
 
+  --vr-layer-behind: -1;
   --vr-layer-base: 0;
   --vr-layer-raised: 1;
   --vr-layer-sticky: 10;
