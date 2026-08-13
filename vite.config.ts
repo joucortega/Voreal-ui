@@ -2,7 +2,7 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { configDefaults, defineConfig } from "vitest/config";
 
-const testExclude = [...configDefaults.exclude, "e2e/**"];
+const testExclude = [...configDefaults.exclude, "e2e/**", "scripts/**"];
 
 export default defineConfig({
   plugins: [tailwindcss(), react()],

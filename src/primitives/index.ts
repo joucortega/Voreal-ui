@@ -1,6 +1,7 @@
 export {
   useVorealPortalProps,
   VorealRoot,
+  type VorealBuiltInTheme,
   type VorealDensity,
   type VorealRootProps,
   type VorealTheme,

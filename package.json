@@ -6,8 +6,25 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "files": [
+    "src",
+    "docs",
+    "CHANGELOG.md",
+    "README.md"
+  ],
   "exports": {
     ".": "./src/index.ts",
+    "./avatar": "./src/components/avatar/index.ts",
+    "./button": "./src/components/button/index.ts",
+    "./content": "./src/components/content/index.ts",
+    "./data": "./src/components/data/index.ts",
+    "./feedback": "./src/components/feedback/index.ts",
+    "./form": "./src/components/form/index.ts",
+    "./navigation": "./src/components/navigation/index.ts",
+    "./overlay": "./src/components/overlay/index.ts",
+    "./primitives": "./src/primitives/index.ts",
+    "./patterns/admin": "./src/patterns/admin/index.ts",
+    "./patterns/directory": "./src/patterns/directory/index.ts",
     "./styles.css": "./src/styles/index.css",
     "./theme/neutral.css": "./src/themes/neutral.css",
     "./theme/red-latina.css": "./src/themes/red-latina.css",
@@ -18,7 +35,7 @@
     "react-dom": ">=18.3 <20"
   },
   "scripts": {
-    "test": "vitest run --project unit",
+    "test": "vitest run --project unit && node --test scripts/*.test.mjs",
     "test:a11y": "vitest run --project a11y -t \"accessib|violations\"",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "build": "tsc -p tsconfig.build.json",
@@ -26,7 +43,8 @@
     "build-storybook": "storybook build",
     "test:e2e": "playwright test",
     "lint:css": "stylelint 'src/**/*.css'",
-    "audit:css": "node scripts/audit-css.mjs"
+    "audit:css": "node scripts/audit-css.mjs",
+    "budget:css": "node scripts/check-css-budget.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",

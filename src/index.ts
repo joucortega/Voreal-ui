@@ -8,4 +8,5 @@ export * from "./components/feedback";
 export * from "./components/content";
 export * from "./components/data";
 export * from "./patterns/directory";
+export * from "./patterns/admin";
 export { cn } from "./utilities/cn";

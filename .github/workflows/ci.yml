@@ -1,0 +1,34 @@
+name: Voreal UI
+
+on:
+  pull_request:
+  push:
+    branches: [main, "agent/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.32.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test
+      - run: pnpm test:a11y
+      - run: pnpm typecheck
+      - run: pnpm lint:css
+      - run: pnpm audit:css
+      - run: pnpm build
+      - run: pnpm build-storybook
+      - run: pnpm test:e2e
+      - run: pnpm budget:css

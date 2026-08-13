@@ -3,6 +3,7 @@ import { cn } from "../../utilities/cn";
 import {
   useVorealPortalProps,
   VorealProvider,
+  type VorealBuiltInTheme,
   type VorealDensity,
   type VorealTheme,
 } from "./voreal-context";
@@ -35,4 +36,4 @@ export function VorealRoot({
 }
 
 export { useVorealPortalProps };
-export type { VorealDensity, VorealTheme };
+export type { VorealBuiltInTheme, VorealDensity, VorealTheme };
