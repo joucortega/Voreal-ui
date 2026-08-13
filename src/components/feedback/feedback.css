@@ -1,0 +1,259 @@
+.vr-alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--vr-space-3);
+  padding: var(--vr-space-4);
+  color: var(--vr-text);
+  background: var(--vr-action-soft);
+  border: 1px solid color-mix(in srgb, var(--vr-action) 34%, var(--vr-border));
+  border-inline-start-width: 4px;
+  border-radius: var(--vr-radius-card);
+}
+
+.vr-alert[data-variant="success"] {
+  background: var(--vr-success-surface);
+  border-color: color-mix(in srgb, var(--vr-success) 42%, var(--vr-border));
+}
+
+.vr-alert[data-variant="warning"] {
+  background: var(--vr-warning-surface);
+  border-color: color-mix(in srgb, var(--vr-warning) 42%, var(--vr-border));
+}
+
+.vr-alert[data-variant="danger"] {
+  background: var(--vr-danger-surface);
+  border-color: color-mix(in srgb, var(--vr-danger) 42%, var(--vr-border));
+}
+
+.vr-alert__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--vr-radius-pill);
+}
+
+.vr-alert__copy {
+  display: grid;
+  gap: var(--vr-space-1);
+}
+
+.vr-alert__title {
+  color: var(--vr-text-strong);
+  font-size: var(--vr-text-sm);
+}
+
+.vr-alert__description {
+  color: var(--vr-text-muted);
+  font-size: var(--vr-text-sm);
+  line-height: var(--vr-leading-sm);
+}
+
+.vr-alert__action {
+  display: inline-flex;
+}
+
+.vr-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--vr-space-3);
+}
+
+.vr-progress {
+  position: relative;
+  flex: 1;
+  block-size: 0.625rem;
+  overflow: hidden;
+  background: var(--vr-surface-muted);
+  border: 1px solid var(--vr-border);
+  border-radius: var(--vr-radius-pill);
+}
+
+.vr-progress__bar {
+  display: block;
+  block-size: 100%;
+  background: linear-gradient(90deg, var(--vr-action), var(--vr-accent));
+  border-radius: inherit;
+  transition: inline-size var(--vr-duration-slow) var(--vr-ease-emphasized);
+}
+
+.vr-progress__bar[data-indeterminate="true"] {
+  inline-size: 38%;
+  animation: vr-progress-indeterminate 1.4s var(--vr-ease-standard) infinite;
+}
+
+.vr-progress__value {
+  min-inline-size: 3ch;
+  color: var(--vr-text-muted);
+  font-size: var(--vr-text-xs);
+  font-weight: var(--vr-font-weight-semibold);
+  text-align: end;
+}
+
+.vr-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--vr-surface-muted);
+  border-radius: var(--vr-radius-card);
+}
+
+.vr-skeleton::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--vr-surface) 76%, transparent), transparent);
+  content: "";
+  transform: translateX(-100%);
+  animation: vr-skeleton-shimmer 1.6s var(--vr-ease-standard) infinite;
+}
+
+.vr-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--vr-space-3);
+  inline-size: min(100%, 38rem);
+  padding: var(--vr-space-8);
+  color: var(--vr-text);
+  background: var(--vr-surface);
+  border: 1px solid var(--vr-border);
+  border-radius: var(--vr-radius-panel);
+  text-align: center;
+}
+
+.vr-state--error {
+  border-color: color-mix(in srgb, var(--vr-danger) 42%, var(--vr-border));
+}
+
+.vr-state--error:focus-visible {
+  outline: var(--vr-focus-width) solid var(--vr-focus);
+  outline-offset: var(--vr-focus-offset);
+}
+
+.vr-state__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 3.25rem;
+  block-size: 3.25rem;
+  color: var(--vr-action);
+  background: var(--vr-action-soft);
+  border-radius: 40% 60% 56% 44% / 46% 42% 58% 54%;
+  font-size: var(--vr-text-xl);
+  font-weight: var(--vr-font-weight-bold);
+}
+
+.vr-state--error .vr-state__icon {
+  color: var(--vr-danger);
+  background: var(--vr-danger-surface);
+}
+
+.vr-state__title {
+  color: var(--vr-text-strong);
+  font-family: var(--vr-font-heading);
+  font-size: var(--vr-text-xl);
+}
+
+.vr-state__description {
+  max-inline-size: 54ch;
+  margin: 0;
+  color: var(--vr-text-muted);
+  line-height: var(--vr-leading-md);
+}
+
+.vr-state__action {
+  display: inline-flex;
+  margin-block-start: var(--vr-space-2);
+}
+
+.vr-toast-viewport {
+  position: fixed;
+  z-index: var(--vr-layer-toast);
+  inset-block-end: var(--vr-page-gutter);
+  inset-inline-end: var(--vr-page-gutter);
+  display: flex;
+  flex-direction: column;
+  gap: var(--vr-space-3);
+  inline-size: min(25rem, calc(100vw - 2 * var(--vr-page-gutter)));
+  max-block-size: calc(100vh - 2 * var(--vr-page-gutter));
+  max-block-size: calc(100dvh - 2 * var(--vr-page-gutter));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  outline: none;
+}
+
+.vr-toast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--vr-space-2) var(--vr-space-3);
+  padding: var(--vr-space-4);
+  color: var(--vr-text);
+  background: var(--vr-surface-overlay);
+  border: 1px solid var(--vr-border);
+  border-inline-start: 4px solid var(--vr-success);
+  border-radius: var(--vr-radius-card);
+  box-shadow: var(--vr-shadow-3);
+}
+
+.vr-toast[data-state="open"] {
+  animation: vr-toast-in var(--vr-duration-slow) var(--vr-ease-emphasized);
+}
+
+.vr-toast[data-state="closed"] {
+  animation: vr-toast-out var(--vr-duration-normal) var(--vr-ease-standard);
+}
+
+.vr-toast [data-radix-toast-title] {
+  color: var(--vr-text-strong);
+  font-weight: var(--vr-font-weight-bold);
+}
+
+.vr-toast [data-radix-toast-description] {
+  color: var(--vr-text-muted);
+  font-size: var(--vr-text-sm);
+}
+
+@keyframes vr-progress-indeterminate {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(320%); }
+}
+
+@keyframes vr-skeleton-shimmer {
+  to { transform: translateX(100%); }
+}
+
+@keyframes vr-toast-in {
+  from { opacity: 0; transform: translateY(var(--vr-space-4)) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes vr-toast-out {
+  to { opacity: 0; transform: translateX(25%); }
+}
+
+@media (max-width: 30rem) {
+  .vr-alert {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .vr-alert__action {
+    grid-column: 2;
+  }
+}
+
+@media (forced-colors: active) {
+  .vr-alert,
+  .vr-state,
+  .vr-toast {
+    border: 1px solid CanvasText;
+  }
+
+  .vr-progress__bar,
+  .vr-state__icon {
+    color: HighlightText;
+    background: Highlight;
+  }
+
+  .vr-skeleton::after {
+    display: none;
+  }
+}

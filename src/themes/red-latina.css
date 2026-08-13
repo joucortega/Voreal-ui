@@ -1,0 +1,35 @@
+:where(.vr-root, [data-vr-root], [data-vr-portal])[data-vr-theme="red-latina"] {
+  color-scheme: light;
+  --vr-brand-canvas: #fff9ef;
+  --vr-brand-ink: #071b46;
+  --vr-brand-action: #c83b20;
+  --vr-brand-coral: #ff5c35;
+  --vr-brand-community: #39d353;
+  --vr-canvas: #fff9ef;
+  --vr-surface: #fff;
+  --vr-surface-muted: #f5ecdf;
+  --vr-surface-raised: #fff;
+  --vr-text: #071b46;
+  --vr-text-muted: #56617a;
+  --vr-border: #dfd1bd;
+  --vr-border-strong: #b9a88e;
+  --vr-action: #c83b20;
+  --vr-action-hover: #a92f19;
+  --vr-action-soft: #f9ded5;
+  --vr-on-action: #fff;
+  --vr-accent: var(--vr-brand-coral);
+  --vr-on-accent: var(--vr-brand-ink);
+  --vr-success: var(--vr-brand-community);
+  --vr-success-surface: #ddf8e5;
+  --vr-on-success: var(--vr-brand-ink);
+  --vr-warning: #8a5200;
+  --vr-warning-surface: #fff0c7;
+  --vr-on-warning: #382000;
+  --vr-danger: #a92f19;
+  --vr-danger-surface: #f9ded5;
+  --vr-on-danger: #fff;
+  --vr-focus: #0b57d0;
+  --vr-focus-contrast: #fff;
+  --vr-selection: #ffd7c8;
+  --vr-on-selection: var(--vr-brand-ink);
+}

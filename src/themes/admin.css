@@ -1,0 +1,8 @@
+:where(.vr-root, [data-vr-root], [data-vr-portal])[data-vr-theme="red-latina"][data-vr-density="compact"] {
+  --vr-canvas: #f5f3ee;
+  --vr-surface-muted: #ede9e1;
+  --vr-border: #d8d2c7;
+  --vr-decoration-opacity: 0.35;
+  --vr-shadow-1: 0 1px 2px rgb(7 27 70 / 7%), 0 2px 8px rgb(7 27 70 / 5%);
+  --vr-shadow-2: 0 6px 18px rgb(7 27 70 / 9%), 0 2px 6px rgb(7 27 70 / 6%);
+}
