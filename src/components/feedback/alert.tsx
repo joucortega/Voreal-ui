@@ -2,7 +2,7 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../utilities/cn";
 
 export type AlertVariant = "danger" | "info" | "success" | "warning";
-export type AlertProps = HTMLAttributes<HTMLDivElement> & {
+export type AlertProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
   action?: ReactNode;
   description?: ReactNode;
   icon?: ReactNode;

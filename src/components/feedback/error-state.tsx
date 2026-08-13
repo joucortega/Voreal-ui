@@ -3,7 +3,7 @@
 import { forwardRef, useEffect, useRef, type HTMLAttributes, type ReactNode } from "react";
 import { cn } from "../../utilities/cn";
 
-export type ErrorStateProps = HTMLAttributes<HTMLDivElement> & {
+export type ErrorStateProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
   action?: ReactNode;
   autoFocus?: boolean;
   description?: ReactNode;

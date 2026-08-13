@@ -5,4 +5,6 @@ export * from "./components/form";
 export * from "./components/navigation";
 export * from "./components/overlay";
 export * from "./components/feedback";
+export * from "./components/content";
+export * from "./components/data";
 export { cn } from "./utilities/cn";

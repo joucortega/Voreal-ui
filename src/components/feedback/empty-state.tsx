@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from "react";
 import { cn } from "../../utilities/cn";
 
-export type EmptyStateProps = HTMLAttributes<HTMLDivElement> & {
+export type EmptyStateProps = Omit<HTMLAttributes<HTMLDivElement>, "title"> & {
   action?: ReactNode;
   description?: ReactNode;
   icon?: ReactNode;
