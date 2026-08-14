@@ -184,6 +184,10 @@
 .vr-toast {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title close"
+    "description close"
+    "action action";
   gap: var(--vr-space-2) var(--vr-space-3);
   padding: var(--vr-space-4);
   color: var(--vr-text);
@@ -202,14 +206,49 @@
   animation: vr-toast-out var(--vr-duration-normal) var(--vr-ease-standard);
 }
 
-.vr-toast [data-radix-toast-title] {
+.vr-toast__title {
+  grid-area: title;
+  min-inline-size: 0;
   color: var(--vr-text-strong);
   font-weight: var(--vr-font-weight-bold);
 }
 
-.vr-toast [data-radix-toast-description] {
+.vr-toast__description {
+  grid-area: description;
+  min-inline-size: 0;
   color: var(--vr-text-muted);
   font-size: var(--vr-text-sm);
+}
+
+.vr-toast__action {
+  grid-area: action;
+  justify-self: start;
+  min-block-size: var(--vr-touch-target-min);
+}
+
+.vr-toast__close {
+  grid-area: close;
+  align-self: start;
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--vr-touch-target-min);
+  block-size: var(--vr-touch-target-min);
+  padding: 0;
+  color: var(--vr-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--vr-radius-control);
+  font: inherit;
+}
+
+.vr-toast__close:hover {
+  color: var(--vr-text);
+  background: var(--vr-surface-muted);
+}
+
+.vr-toast__close:focus-visible {
+  outline: var(--vr-focus-width) solid var(--vr-focus);
+  outline-offset: var(--vr-focus-offset);
 }
 
 @keyframes vr-progress-indeterminate {

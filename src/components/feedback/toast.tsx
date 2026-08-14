@@ -6,10 +6,34 @@ import { useVorealPortalProps } from "../../primitives";
 import { cn } from "../../utilities/cn";
 
 export const ToastProvider = ToastPrimitive.Provider;
-export const ToastAction = ToastPrimitive.Action;
-export const ToastClose = ToastPrimitive.Close;
-export const ToastTitle = ToastPrimitive.Title;
-export const ToastDescription = ToastPrimitive.Description;
+
+export const ToastAction = forwardRef<
+  ElementRef<typeof ToastPrimitive.Action>,
+  ComponentPropsWithoutRef<typeof ToastPrimitive.Action>
+>(function ToastAction({ className, ...props }, ref) {
+  return <ToastPrimitive.Action {...props} className={cn("vr-toast__action", className)} ref={ref} />;
+});
+
+export const ToastClose = forwardRef<
+  ElementRef<typeof ToastPrimitive.Close>,
+  ComponentPropsWithoutRef<typeof ToastPrimitive.Close>
+>(function ToastClose({ className, ...props }, ref) {
+  return <ToastPrimitive.Close {...props} className={cn("vr-toast__close", className)} ref={ref} />;
+});
+
+export const ToastTitle = forwardRef<
+  ElementRef<typeof ToastPrimitive.Title>,
+  ComponentPropsWithoutRef<typeof ToastPrimitive.Title>
+>(function ToastTitle({ className, ...props }, ref) {
+  return <ToastPrimitive.Title {...props} className={cn("vr-toast__title", className)} ref={ref} />;
+});
+
+export const ToastDescription = forwardRef<
+  ElementRef<typeof ToastPrimitive.Description>,
+  ComponentPropsWithoutRef<typeof ToastPrimitive.Description>
+>(function ToastDescription({ className, ...props }, ref) {
+  return <ToastPrimitive.Description {...props} className={cn("vr-toast__description", className)} ref={ref} />;
+});
 
 export type ToastProps = ComponentPropsWithoutRef<typeof ToastPrimitive.Root>;
 export const Toast = forwardRef<ElementRef<typeof ToastPrimitive.Root>, ToastProps>(function Toast(

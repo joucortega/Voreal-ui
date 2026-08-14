@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
+import type { VorealLinkComponent } from "../../primitives";
 import { cn } from "../../utilities/cn";
 
 export type AdminNavigationItem = {
@@ -9,6 +10,7 @@ export type AdminNavigationItem = {
 };
 
 export type AdminShellProps = HTMLAttributes<HTMLDivElement> & {
+  LinkComponent?: VorealLinkComponent;
   brand?: ReactNode;
   current?: string;
   items: readonly AdminNavigationItem[];
@@ -16,6 +18,7 @@ export type AdminShellProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 export function AdminShell({
+  LinkComponent: LinkComponentProp,
   brand = "Voreal",
   children,
   className,
@@ -24,6 +27,7 @@ export function AdminShell({
   utility,
   ...props
 }: AdminShellProps) {
+  const LinkComponent = LinkComponentProp ?? "a";
   return (
     <div {...props} className={cn("vr-admin-shell", className)}>
       <aside className="vr-admin-shell__sidebar">
@@ -34,7 +38,7 @@ export function AdminShell({
               const active = item.value === current;
               return (
                 <li key={item.value}>
-                  <a
+                  <LinkComponent
                     aria-current={active ? "page" : undefined}
                     className="vr-admin-shell__link"
                     data-active={active ? "true" : undefined}
@@ -42,7 +46,7 @@ export function AdminShell({
                   >
                     {item.icon ? <span aria-hidden="true" className="vr-admin-shell__icon">{item.icon}</span> : null}
                     <span>{item.label}</span>
-                  </a>
+                  </LinkComponent>
                 </li>
               );
             })}

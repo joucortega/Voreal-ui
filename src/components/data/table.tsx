@@ -8,7 +8,7 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(function Table(
   ref,
 ) {
   return (
-    <div className="vr-table-scroll" tabIndex={0}>
+    <div aria-label={`${label}. Desplaza horizontalmente para ver más columnas.`} className="vr-table-scroll" role="region" tabIndex={0}>
       <table {...props} aria-label={label} className={cn("vr-table", className)} ref={ref} />
     </div>
   );

@@ -7,6 +7,10 @@ import { AdminReference } from "./admin-reference";
 import { AdminShell } from "./admin-shell";
 import { PublicationStatus } from "./publication-status";
 
+function RouterLink({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  return <a {...props} data-router-link="true" href={href}>{children}</a>;
+}
+
 it("exposes admin navigation and status without relying on color", () => {
   renderVoreal(<AdminReference />, { density: "compact", theme: "red-latina" });
 
@@ -29,6 +33,20 @@ it("marks the current admin destination and keeps content discoverable", () => {
 
   expect(screen.getByRole("link", { name: "Negocios" })).toHaveAttribute("aria-current", "page");
   expect(screen.getByRole("heading", { name: "Directorio" })).toBeVisible();
+});
+
+it("routes AdminShell navigation through a framework link adapter", () => {
+  renderVoreal(
+    <AdminShell
+      LinkComponent={RouterLink}
+      current="businesses"
+      items={[{ href: "/admin/negocios", label: "Negocios", value: "businesses" }]}
+    >
+      <h1>Directorio</h1>
+    </AdminShell>,
+  );
+
+  expect(screen.getByRole("link", { name: "Negocios" })).toHaveAttribute("data-router-link", "true");
 });
 
 it("labels status and activity chronology with text", () => {

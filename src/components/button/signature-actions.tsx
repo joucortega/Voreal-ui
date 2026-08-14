@@ -2,6 +2,7 @@
 
 import * as RadioGroup from "@radix-ui/react-radio-group";
 import { useState, type ButtonHTMLAttributes, type ReactNode } from "react";
+import { ArrowRightIcon } from "../../icons";
 import { cn } from "../../utilities/cn";
 import { Button } from "./button";
 import type { ButtonProps } from "./button.types";
@@ -10,7 +11,7 @@ export type PathButtonProps = ButtonProps & {
   destination?: string;
 };
 
-export function PathButton({ children, className, destination, endIcon = "→", ...props }: PathButtonProps) {
+export function PathButton({ children, className, destination, endIcon = <ArrowRightIcon />, ...props }: PathButtonProps) {
   return (
     <Button
       {...props}

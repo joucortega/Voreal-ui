@@ -1,4 +1,5 @@
 import { Badge, Card } from "../../components/content";
+import { ArrowRightIcon } from "../../icons";
 
 export type AdSlotProps = {
   advertiser: string;
@@ -16,7 +17,7 @@ export function AdSlot({ advertiser, description, href, title }: AdSlotProps) {
         <strong>{title}</strong>
         {description ? <p>{description}</p> : null}
       </div>
-      <a aria-label={`Ver anuncio de ${advertiser}`} className="vr-ad-slot__link" href={href}>Conocer más <span aria-hidden="true">→</span></a>
+      <a aria-label={`Ver anuncio de ${advertiser}`} className="vr-ad-slot__link" href={href}>Conocer más <ArrowRightIcon /></a>
     </Card>
   );
 }

@@ -1,8 +1,9 @@
 import { render, type RenderResult } from "@testing-library/react";
 import type { ReactElement } from "react";
+import type { VorealTheme } from "../primitives";
 
 export type RenderVorealOptions = {
-  theme?: "neutral" | "red-latina";
+  theme?: VorealTheme;
   density?: "comfortable" | "compact";
 };
 

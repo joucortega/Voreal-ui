@@ -1,18 +1,13 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon } from "../../icons";
 import { EmptyState } from "../feedback";
 import { Skeleton } from "../feedback/skeleton";
+import type { DataTableColumn, DataTableSort, SortDirection } from "./data-table.types";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
 
-export type SortDirection = "asc" | "desc";
-export type DataTableSort = { direction: SortDirection; key: string };
-
-export type DataTableColumn<Row> = {
-  align?: "center" | "end" | "start";
-  cell: (row: Row) => ReactNode;
-  header: ReactNode;
-  key: string;
-  sortable?: boolean;
-};
+export type { DataTableColumn, DataTableSort, SortDirection } from "./data-table.types";
 
 export type DataTableProps<Row> = {
   columns: readonly DataTableColumn<Row>[];
@@ -96,7 +91,7 @@ export function DataTable<Row>({
                     type="button"
                   >
                     <span>{column.header}</span>
-                    <span aria-hidden="true">{activeSort === "asc" ? "↑" : activeSort === "desc" ? "↓" : "↕"}</span>
+                    {activeSort === "asc" ? <ArrowUpIcon /> : activeSort === "desc" ? <ArrowDownIcon /> : <ArrowUpDownIcon />}
                   </button>
                 ) : column.header}
               </TableHead>

@@ -1,6 +1,6 @@
 # Voreal UI
 
-Voreal UI `0.1.0` es un sistema visual React reutilizable para directorios modernos. La primera identidad es **Mercado contemporáneo** de Red Latina 360: marfil cálido, azul profundo, coral de acción y verde comunitario, sin mezclar la dirección morada/naranja descartada.
+Voreal UI `0.1.0` es un sistema visual React reutilizable para directorios modernos. La identidad principal es **Mercado contemporáneo** de Red Latina 360: marfil cálido, azul profundo, coral de acción y verde comunitario, sin mezclar la dirección morada/naranja descartada. `mercado-nocturno` ofrece una variante oscura del mismo lenguaje visual.
 
 El paquete combina CSS encapsulado y tokens semánticos, Tailwind CSS v4 para utilidades acotadas, y Radix Primitives para interacción accesible. Incluye componentes base, patrones públicos de directorio y una superficie administrativa compacta.
 
@@ -89,6 +89,37 @@ export function PortalPropio({ children }: { children: React.ReactNode }) {
 }
 ```
 
+El orden de capas reserva los niveles superiores para listas desplegables y popovers, por lo que un `Select` abierto dentro de un `Drawer` o `Dialog` permanece visible y operable.
+
+## Next.js App Router
+
+Voreal no depende de Next.js. Pasa `next/link` a los patrones con navegación y compón `next/image` dentro de `MediaFrame`:
+
+```tsx
+import Image from "next/image";
+import Link from "next/link";
+import { MediaFrame } from "@voreal/ui/content/media-frame";
+import { BusinessCard } from "@voreal/ui/patterns/directory";
+
+<BusinessCard
+  LinkComponent={Link}
+  business={business}
+  media={
+    <MediaFrame alt={business.image.alt} aspectRatio="16 / 10" fallback="SC">
+      <Image alt={business.image.alt} fill sizes="(max-width: 48rem) 100vw, 38vw" src={business.image.src} />
+    </MediaFrame>
+  }
+/>
+```
+
+`AdminShell` acepta el mismo `LinkComponent`. Para tarjetas genéricas usa `<CardLink asChild><Link href="…">…</Link></CardLink>`. Consulta [Integración con Next.js](docs/NEXTJS.md).
+
+## Tablas en servidor y cliente
+
+- `StaticDataTable` no incluye eventos y puede renderizarse desde un Server Component.
+- `DataTable` declara su frontera de cliente e incorpora selección y ordenamiento controlados.
+- `Table` conserva el desplazamiento horizontal dentro de una región accesible sin ensanchar la página.
+
 ## Imports reducibles por árbol
 
 El entry principal es ESM y permite tree shaking. Para límites de bundle más explícitos usa subrutas:
@@ -119,9 +150,10 @@ pnpm budget:css
 ## Documentación
 
 - [Temas](docs/THEMING.md)
+- [Integración con Next.js](docs/NEXTJS.md)
 - [Migración desde CSS heredado](docs/MIGRATION.md)
 - [Decisiones](DECISIONS.md)
 - [Especificación aprobada](docs/specs/voreal-ui-design.md)
 - [Plan de implementación](docs/plans/voreal-ui-implementation.md)
 
-El repositorio permanece privado durante la etapa inicial; una publicación pública requiere una decisión separada de licencia y distribución.
+El código fuente del repositorio es público. El campo `private: true` de `package.json` evita una publicación accidental en npm; distribuirlo públicamente como paquete sigue requiriendo una decisión de versión y licencia.

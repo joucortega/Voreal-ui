@@ -39,9 +39,9 @@
   --vr-layer-base: 0;
   --vr-layer-raised: 1;
   --vr-layer-sticky: 10;
-  --vr-layer-dropdown: 20;
-  --vr-layer-popover: 30;
+  --vr-layer-dropdown: 60;
+  --vr-layer-popover: 70;
   --vr-layer-drawer: 40;
   --vr-layer-dialog: 50;
-  --vr-layer-toast: 60;
+  --vr-layer-toast: 80;
 }

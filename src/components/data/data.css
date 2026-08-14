@@ -1,6 +1,10 @@
 .vr-table-scroll {
+  inline-size: 100%;
+  min-inline-size: 0;
   max-inline-size: 100%;
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
   border: 1px solid var(--vr-border);
   border-radius: var(--vr-radius-card);
   box-shadow: var(--vr-shadow-1);
@@ -86,6 +90,10 @@
   font-weight: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
+}
+
+.vr-data-table__sort .vr-icon {
+  font-size: var(--vr-text-md);
 }
 
 .vr-data-table__empty {

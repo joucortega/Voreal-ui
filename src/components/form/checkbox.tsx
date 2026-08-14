@@ -3,6 +3,7 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import * as LabelPrimitive from "@radix-ui/react-label";
 import { useId, type ComponentPropsWithoutRef, type ReactNode } from "react";
+import { CheckIcon } from "../../icons";
 import { cn } from "../../utilities/cn";
 import { useFieldControl } from "./field";
 
@@ -27,7 +28,7 @@ export function Checkbox({ className, description, id, label, ...props }: Checkb
     <div className={cn("vr-choice", className)}>
       <CheckboxPrimitive.Root {...props} {...fieldProps} className="vr-checkbox">
         <CheckboxPrimitive.Indicator aria-hidden="true" className="vr-checkbox__indicator">
-          ✓
+          <CheckIcon />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
       <span className="vr-choice__copy">

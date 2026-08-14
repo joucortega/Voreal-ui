@@ -6,7 +6,9 @@ import { renderVoreal } from "../../testing/render-voreal";
 import { Accordion } from "../content/accordion";
 import { Card, CardLink } from "../content/card";
 import { Media } from "../content/media";
+import { MediaFrame } from "../content/media-frame";
 import { DataTable, type DataTableColumn } from "./data-table";
+import { StaticDataTable } from "./static-data-table";
 import { DefinitionList } from "./definition-list";
 import { StatCard } from "./stat-card";
 
@@ -81,6 +83,17 @@ it("renders empty tables without losing their accessible name", () => {
   expect(screen.getByText("No encontramos negocios")).toBeVisible();
 });
 
+it("renders a server-safe static data table without interactive controls", () => {
+  renderVoreal(
+    <StaticDataTable columns={columns} getRowKey={(row) => row.id} label="Directorio estático" rows={rows} />,
+  );
+
+  expect(screen.getByRole("table", { name: "Directorio estático" })).toBeVisible();
+  expect(screen.getByText("Sabor de Casa")).toBeVisible();
+  expect(screen.queryByRole("button", { name: /ordenar/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
+});
+
 it("provides robust media fallback and content primitives", async () => {
   const user = userEvent.setup();
   renderVoreal(
@@ -104,6 +117,32 @@ it("provides robust media fallback and content primitives", async () => {
   expect(screen.getByText("De lunes a sábado")).toBeVisible();
   expect(screen.getByText("1,248")).toBeVisible();
   expect(screen.getByText("Baltimore, MD")).toBeVisible();
+});
+
+it("lets optimized framework images render inside a stable MediaFrame", () => {
+  renderVoreal(
+    <MediaFrame alt="Foto optimizada" aspectRatio="16 / 9" fallback="FO">
+      <span data-testid="next-image-adapter">Imagen optimizada por Next</span>
+    </MediaFrame>,
+  );
+
+  const frame = screen.getByTestId("next-image-adapter").closest(".vr-media");
+  expect(frame).toHaveStyle({ aspectRatio: "16 / 9" });
+  expect(frame).toContainElement(screen.getByTestId("next-image-adapter"));
+});
+
+it("composes CardLink with a framework router link", () => {
+  function RouterLink({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+    return <a {...props} data-router-link="true" href={href}>{children}</a>;
+  }
+
+  renderVoreal(
+    <CardLink asChild>
+      <RouterLink href="/negocios/sabor-de-casa">Abrir perfil</RouterLink>
+    </CardLink>,
+  );
+
+  expect(screen.getByRole("link", { name: "Abrir perfil" })).toHaveAttribute("data-router-link", "true");
 });
 
 it("has no detectable accessibility violations in representative data", async () => {

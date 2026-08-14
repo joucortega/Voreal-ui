@@ -38,4 +38,6 @@ test("keeps mobile category overflow scrollable", async ({ page }) => {
   await expect(categories).toBeVisible();
   const overflows = await categories.evaluate((element) => element.scrollWidth > element.clientWidth);
   expect(overflows).toBe(true);
+  const hasPageOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+  expect(hasPageOverflow).toBe(false);
 });

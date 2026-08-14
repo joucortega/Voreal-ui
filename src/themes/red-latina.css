@@ -15,11 +15,13 @@
   --vr-border-strong: #b9a88e;
   --vr-action: #c83b20;
   --vr-action-hover: #a92f19;
+  --vr-action-foreground: #9b2c18;
   --vr-action-soft: #f9ded5;
   --vr-on-action: #fff;
   --vr-accent: var(--vr-brand-coral);
   --vr-on-accent: var(--vr-brand-ink);
-  --vr-success: var(--vr-brand-community);
+  --vr-community-accent: var(--vr-brand-community);
+  --vr-success: #217a38;
   --vr-success-surface: #ddf8e5;
   --vr-on-success: var(--vr-brand-ink);
   --vr-warning: #8a5200;

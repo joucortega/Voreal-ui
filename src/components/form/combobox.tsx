@@ -2,6 +2,7 @@
 
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 import { useId, useState, type ChangeEvent, type KeyboardEvent } from "react";
+import { CheckIcon, ChevronDownIcon } from "../../icons";
 import { useVorealPortalProps } from "../../primitives";
 import { cn } from "../../utilities/cn";
 import { useFieldControl } from "./field";
@@ -113,7 +114,7 @@ export function Combobox({
               role="combobox"
               value={query}
             />
-            <span aria-hidden="true" className="vr-combobox__icon">⌄</span>
+            <span aria-hidden="true" className="vr-combobox__icon"><ChevronDownIcon /></span>
           </span>
         </PopoverPrimitive.Anchor>
         <PopoverPrimitive.Portal>
@@ -146,7 +147,7 @@ export function Combobox({
                       role="option"
                     >
                       <span>{item.label}</span>
-                      {item.value === value ? <span aria-hidden="true">✓</span> : null}
+                      {item.value === value ? <CheckIcon /> : null}
                     </div>
                   );
                 })

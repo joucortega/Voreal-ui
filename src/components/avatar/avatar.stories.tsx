@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ChevronDownIcon, MoreHorizontalIcon } from "../../icons";
 import { IconButton } from "../button/button";
 import { Avatar } from "./avatar";
 import { AvatarWeave } from "./avatar-group";
@@ -55,7 +56,7 @@ export const IdentityCapsules: Story = {
       <IdentityCapsule
         action={
           <IconButton label="Abrir opciones" size="sm" variant="ghost">
-            •••
+            <MoreHorizontalIcon />
           </IconButton>
         }
         name="Ana Martínez"
@@ -83,7 +84,7 @@ export const CompactAdminIdentity: Story = {
       <IdentityCapsule
         action={
           <IconButton density="compact" label="Cuenta" size="sm" variant="ghost">
-            ⌄
+            <ChevronDownIcon />
           </IconButton>
         }
         avatarSize="sm"

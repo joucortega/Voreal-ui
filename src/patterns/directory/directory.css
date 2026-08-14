@@ -247,10 +247,19 @@
 
 .vr-business-card__link,
 .vr-ad-slot__link {
-  color: var(--vr-action);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vr-space-1);
+  color: var(--vr-action-foreground);
   font-size: var(--vr-text-sm);
   font-weight: var(--vr-font-weight-bold);
   text-decoration: none;
+}
+
+.vr-business-card__link .vr-icon,
+.vr-ad-slot__link .vr-icon,
+.vr-promotion-card a .vr-icon {
+  font-size: 1.1em;
 }
 
 .vr-business-gallery {
@@ -364,6 +373,11 @@
   font-size: var(--vr-text-display);
 }
 
+.vr-location-card__map .vr-icon {
+  inline-size: 1em;
+  block-size: 1em;
+}
+
 .vr-location-card__body {
   display: grid;
   align-content: center;
@@ -390,6 +404,15 @@
 
 .vr-promotion-card p {
   color: var(--vr-text-muted);
+}
+
+.vr-promotion-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vr-space-1);
+  inline-size: fit-content;
+  color: var(--vr-action-foreground);
+  font-weight: var(--vr-font-weight-bold);
 }
 
 .vr-ad-slot {
@@ -487,6 +510,8 @@
 }
 
 .vr-directory-reference {
+  inline-size: 100%;
+  max-inline-size: 100%;
   min-block-size: 100vh;
   color: var(--vr-text);
   background: var(--vr-canvas);
@@ -505,7 +530,7 @@
   inset-inline-end: -6rem;
   inline-size: 20rem;
   block-size: 20rem;
-  border: 3rem solid color-mix(in srgb, var(--vr-success) 16%, transparent);
+  border: 3rem solid color-mix(in srgb, var(--vr-community-accent, var(--vr-success)) 16%, transparent);
   border-radius: 48% 52% 38% 62% / 52% 38% 62% 48%;
   content: "";
   pointer-events: none;
@@ -543,6 +568,7 @@
   display: grid;
   gap: var(--vr-space-8);
   padding-block: var(--vr-space-8) var(--vr-space-16);
+  min-inline-size: 0;
 }
 
 .vr-directory-reference__toolbar,
@@ -551,6 +577,12 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--vr-space-4);
+  min-inline-size: 0;
+}
+
+.vr-directory-reference__toolbar-actions {
+  flex-wrap: wrap;
+  justify-content: end;
 }
 
 .vr-directory-reference__toolbar h2,
@@ -572,6 +604,7 @@
   grid-template-columns: minmax(13rem, 0.24fr) minmax(0, 1fr);
   align-items: start;
   gap: var(--vr-space-6);
+  min-inline-size: 0;
 }
 
 .vr-directory-reference__filters {
@@ -635,6 +668,7 @@
   }
 
   .vr-directory-reference__toolbar-actions {
+    justify-content: space-between;
     inline-size: 100%;
   }
 

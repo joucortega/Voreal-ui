@@ -21,19 +21,21 @@ export function CommunityHub({
       className={cn("vr-community-hub", className)}
       role="group"
     >
-      <span aria-hidden="true" className="vr-community-hub__orbit" />
-      <div className="vr-community-hub__center">
-        <Avatar {...center} size="xl" />
-        <strong>{center.name}</strong>
+      <div className="vr-community-hub__stage">
+        <span aria-hidden="true" className="vr-community-hub__orbit" />
+        <div className="vr-community-hub__center">
+          <Avatar {...center} size="xl" />
+          <strong>{center.name}</strong>
+        </div>
+        <AvatarWeave
+          className="vr-community-hub__people"
+          label={`Personas conectadas con ${center.name}`}
+          max={4}
+          onOverflowClick={onOverflowClick}
+          people={people}
+          size="sm"
+        />
       </div>
-      <AvatarWeave
-        className="vr-community-hub__people"
-        label={`Personas conectadas con ${center.name}`}
-        max={4}
-        onOverflowClick={onOverflowClick}
-        people={people}
-        size="sm"
-      />
     </div>
   );
 }
