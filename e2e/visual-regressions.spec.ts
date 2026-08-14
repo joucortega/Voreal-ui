@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 import axe from "axe-core";
 
 test("keeps transient toast copy and controls in separate regions", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/iframe.html?id=interaction-navigation-overlays-and-feedback--transient-toast&viewMode=story");
   await page.getByRole("button", { name: "Guardar cambios" }).click();
 
@@ -9,6 +10,7 @@ test("keeps transient toast copy and controls in separate regions", async ({ pag
   const description = page.getByText("Los cambios ya están disponibles en el directorio.");
   const close = page.getByRole("button", { name: "Cerrar" });
   await expect(title).toBeVisible();
+  await expect.poll(() => close.evaluate((element) => element.getBoundingClientRect().width)).toBeGreaterThanOrEqual(44);
 
   const [titleBox, descriptionBox, closeBox] = await Promise.all([
     title.boundingBox(),
@@ -48,11 +50,15 @@ for (const viewport of [
 }
 
 test("passes WCAG AA checks in Red Latina and Mercado Nocturno", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/iframe.html?id=patterns-directory-reference--mercado-contemporaneo&viewMode=story");
   await page.addScriptTag({ content: axe.source });
 
   for (const theme of ["red-latina", "mercado-nocturno"]) {
     await page.locator("[data-vr-root]").evaluate((root, nextTheme) => root.setAttribute("data-vr-theme", nextTheme), theme);
+    await page.evaluate(() => new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
     const violations = await page.evaluate(async () => {
       const results = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2aa"] } });
       return results.violations;
