@@ -1,6 +1,8 @@
 # Crear un tema Voreal
 
-Un tema nuevo cambia decisiones semánticas —superficie, texto, acción, estados y foco— sin modificar componentes. `VorealRoot` acepta identificadores propios además de `neutral` y `red-latina`.
+Un tema nuevo cambia decisiones semánticas —superficie, texto, acción, estados y foco— sin modificar componentes. `VorealRoot` incluye `neutral`, `red-latina` y `mercado-nocturno`, y también acepta identificadores propios.
+
+`mercado-nocturno` es una variante nocturna de Mercado contemporáneo, no una segunda dirección visual. Actívala con `<VorealRoot theme="mercado-nocturno">` o desde el selector de tema de Storybook.
 
 ## 1. Define el contrato completo
 
@@ -22,6 +24,7 @@ Crea `mi-marca.css` después de importar `styles.css`. Usa `layer(app)` para que
 
     --vr-action: #2457c5;
     --vr-action-hover: #1c459e;
+    --vr-action-foreground: #1c459e;
     --vr-action-soft: #e0eaff;
     --vr-on-action: #fff;
     --vr-accent: #9ac7ff;
@@ -45,7 +48,7 @@ Crea `mi-marca.css` después de importar `styles.css`. Usa `layer(app)` para que
 }
 ```
 
-Los valores anteriores forman el contrato mínimo. Los componentes consumen estas variables semánticas; no necesitan conocer la paleta original.
+Los valores anteriores forman el contrato mínimo. `--vr-action-foreground` se usa para texto y enlaces sobre superficies claras, mientras `--vr-action` conserva el color de controles sólidos. Los componentes consumen estas variables semánticas; no necesitan conocer la paleta original.
 
 ## 2. Activa el tema
 

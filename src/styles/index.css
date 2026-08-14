@@ -8,6 +8,7 @@
 @import "../tokens/component.css" layer(vr-tokens);
 @import "../themes/neutral.css" layer(vr-tokens);
 @import "../themes/red-latina.css" layer(vr-tokens);
+@import "../themes/mercado-nocturno.css" layer(vr-tokens);
 @import "../themes/admin.css" layer(vr-tokens);
 @import "./reset.css" layer(vr-reset);
 @import "./base.css" layer(vr-base);

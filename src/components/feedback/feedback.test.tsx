@@ -8,6 +8,7 @@ import { EmptyState } from "./empty-state";
 import { ErrorState } from "./error-state";
 import { Progress } from "./progress";
 import { Skeleton } from "./skeleton";
+import { Toast, ToastAction, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "./toast";
 
 it("uses persistent alerts for task-blocking errors", () => {
   renderVoreal(
@@ -52,4 +53,23 @@ it("has no detectable accessibility violations across feedback states", async ()
   );
   const results = await axe(container, { rules: { "color-contrast": { enabled: false } } });
   expect(results.violations).toEqual([]);
+});
+
+it("gives every toast region a stable layout class", () => {
+  renderVoreal(
+    <ToastProvider>
+      <Toast open>
+        <ToastTitle>Perfil guardado</ToastTitle>
+        <ToastDescription>Los cambios ya están disponibles.</ToastDescription>
+        <ToastAction altText="Deshacer">Deshacer</ToastAction>
+        <ToastClose aria-label="Cerrar">Cerrar</ToastClose>
+      </Toast>
+      <ToastViewport />
+    </ToastProvider>,
+  );
+
+  expect(screen.getByText("Perfil guardado")).toHaveClass("vr-toast__title");
+  expect(screen.getByText("Los cambios ya están disponibles.")).toHaveClass("vr-toast__description");
+  expect(screen.getByRole("button", { name: "Deshacer" })).toHaveClass("vr-toast__action");
+  expect(screen.getByRole("button", { name: "Cerrar" })).toHaveClass("vr-toast__close");
 });

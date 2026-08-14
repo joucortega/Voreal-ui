@@ -1,5 +1,21 @@
 # Changelog
 
+## Próxima versión
+
+### Corregido
+
+- Contraste AA en insignias, promociones, estados y enlaces publicitarios.
+- Selects portaled visibles sobre drawers y dialogs.
+- Layout estable de Toast, Identity Capsule y Community Hub en móvil y escritorio.
+- Contenedores administrativos y del directorio sin overflow horizontal de página.
+
+### Añadido
+
+- Adaptadores neutrales para `next/link` y `next/image` mediante `LinkComponent`, `CardLink asChild` y `MediaFrame`.
+- `StaticDataTable` server-safe y frontera cliente explícita para `DataTable` interactiva.
+- Iconografía SVG consistente y accesible basada en el lenguaje Lucide.
+- Tema `mercado-nocturno`, variante oscura de Mercado contemporáneo.
+
 ## 0.1.0 — 2026-08-13
 
 ### Añadido

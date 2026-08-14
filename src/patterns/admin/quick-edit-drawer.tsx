@@ -2,6 +2,7 @@
 
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { Button, IconButton } from "../../components/button";
+import { XIcon } from "../../icons";
 import {
   Drawer,
   DrawerClose,
@@ -40,7 +41,7 @@ export function QuickEditDrawer({
             {description ? <DrawerDescription>{description}</DrawerDescription> : null}
           </div>
           <DrawerClose asChild>
-            <IconButton label="Cerrar edición" variant="ghost">×</IconButton>
+            <IconButton label="Cerrar edición" variant="ghost"><XIcon /></IconButton>
           </DrawerClose>
         </div>
         <div className="vr-quick-edit__body">{children}</div>

@@ -34,13 +34,13 @@ export function IdentityCapsule({
       <span className="vr-identity-capsule__copy">
         <strong className="vr-identity-capsule__name">{name}</strong>
         {subtitle ? <span className="vr-identity-capsule__subtitle">{subtitle}</span> : null}
+        {status ? (
+          <span aria-label={`Estado: ${status}`} className="vr-identity-capsule__status">
+            <span aria-hidden="true" className="vr-identity-capsule__status-mark" />
+            {status}
+          </span>
+        ) : null}
       </span>
-      {status ? (
-        <span aria-label={`Estado: ${status}`} className="vr-identity-capsule__status">
-          <span aria-hidden="true" className="vr-identity-capsule__status-mark" />
-          {status}
-        </span>
-      ) : null}
       {action ? <span className="vr-identity-capsule__action">{action}</span> : null}
     </div>
   );

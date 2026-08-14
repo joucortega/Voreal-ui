@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ActionRail, Button } from "../../components/button";
 import { EmptyState, Skeleton } from "../../components/feedback";
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle, DrawerTrigger } from "../../components/overlay";
+import { BuildingIcon, HeartIcon, LocateFixedIcon, SparklesIcon, UtensilsIcon } from "../../icons";
 import { AdSlot } from "./ad-slot";
 import { BusinessCard } from "./business-card";
 import { BusinessContact } from "./business-contact";
@@ -100,11 +101,11 @@ export function DirectoryReference({ loading = false, noResults = false }: Direc
       <div className="vr-container vr-directory-reference__main">
         <CategoryScroller
           categories={[
-            { icon: "⌖", label: "Cerca de mí", value: "all" },
-            { icon: "♨", label: "Restaurantes", value: "food" },
-            { icon: "✦", label: "Belleza", value: "beauty" },
-            { icon: "▣", label: "Servicios", value: "services" },
-            { icon: "♡", label: "Salud", value: "health" },
+            { icon: <LocateFixedIcon />, label: "Cerca de mí", value: "all" },
+            { icon: <UtensilsIcon />, label: "Restaurantes", value: "food" },
+            { icon: <SparklesIcon />, label: "Belleza", value: "beauty" },
+            { icon: <BuildingIcon />, label: "Servicios", value: "services" },
+            { icon: <HeartIcon />, label: "Salud", value: "health" },
           ]}
           onValueChange={setCategory}
           value={category}

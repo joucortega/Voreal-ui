@@ -17,6 +17,7 @@ import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerTitle, Dra
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip";
 import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "../feedback/toast";
+import { XIcon } from "../../icons";
 
 function InteractionShowcase() {
   return (
@@ -50,7 +51,7 @@ function ToastDemo() {
       <Toast onOpenChange={setOpen} open={open}>
         <ToastTitle>Perfil guardado</ToastTitle>
         <ToastDescription>Los cambios ya están disponibles en el directorio.</ToastDescription>
-        <ToastClose aria-label="Cerrar">×</ToastClose>
+        <ToastClose aria-label="Cerrar"><XIcon /></ToastClose>
       </Toast>
       <ToastViewport />
     </ToastProvider>

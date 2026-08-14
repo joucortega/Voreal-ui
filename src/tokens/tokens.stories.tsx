@@ -3,7 +3,7 @@ import "../styles/index.css";
 
 type TokenPreviewProps = {
   density: "comfortable" | "compact";
-  theme: "neutral" | "red-latina";
+  theme: "mercado-nocturno" | "neutral" | "red-latina";
 };
 
 function TokenPreview({ density, theme }: TokenPreviewProps) {
@@ -44,7 +44,7 @@ const meta = {
   },
   argTypes: {
     density: { control: "inline-radio", options: ["comfortable", "compact"] },
-    theme: { control: "inline-radio", options: ["neutral", "red-latina"] },
+    theme: { control: "inline-radio", options: ["neutral", "red-latina", "mercado-nocturno"] },
   },
 } satisfies Meta<typeof TokenPreview>;
 
@@ -56,6 +56,10 @@ export const RedLatina: Story = {};
 
 export const Neutral: Story = {
   args: { theme: "neutral" },
+};
+
+export const MercadoNocturno: Story = {
+  args: { theme: "mercado-nocturno" },
 };
 
 export const AdminDensity: Story = {

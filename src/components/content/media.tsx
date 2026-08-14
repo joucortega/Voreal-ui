@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties, type ImgHTMLAttributes, type ReactNode } from "react";
-import { cn } from "../../utilities/cn";
+import { MediaFrame } from "./media-frame";
 
 export type MediaProps = Omit<ImgHTMLAttributes<HTMLImageElement>, "children"> & {
   aspectRatio?: CSSProperties["aspectRatio"];
@@ -22,15 +22,7 @@ export function Media({
 }: MediaProps) {
   const [failed, setFailed] = useState(!src);
   return (
-    <span className={cn("vr-media", className)} style={{ aspectRatio }}>
-      <span
-        aria-hidden={!failed}
-        aria-label={failed ? alt : undefined}
-        className="vr-media__fallback"
-        role={failed && alt ? "img" : undefined}
-      >
-        {fallback ?? "Sin imagen"}
-      </span>
+    <MediaFrame alt={alt} aspectRatio={aspectRatio} className={className} fallback={fallback} fit={fit}>
       {!failed ? (
         <img
           {...props}
@@ -44,6 +36,6 @@ export function Media({
           style={{ ...style, objectFit: fit }}
         />
       ) : null}
-    </span>
+    </MediaFrame>
   );
 }

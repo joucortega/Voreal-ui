@@ -2,7 +2,7 @@ name: Publish Storybook
 
 on:
   push:
-    branches: [main, "agent/initial-voreal-design"]
+    branches: [main, "agent/**"]
   workflow_dispatch:
 
 permissions:

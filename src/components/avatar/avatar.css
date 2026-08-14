@@ -123,7 +123,7 @@
 
 .vr-identity-capsule {
   display: inline-grid;
-  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--vr-space-3);
   max-inline-size: 100%;
@@ -137,6 +137,7 @@
 
 .vr-identity-capsule__copy {
   display: grid;
+  gap: 1px;
   min-inline-size: 0;
 }
 
@@ -177,29 +178,36 @@
 }
 
 .vr-community-hub {
-  position: relative;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: center;
-  gap: var(--vr-space-6);
   inline-size: min(100%, 34rem);
   padding: var(--vr-space-5);
-  overflow: hidden;
+  overflow: clip;
   background: var(--vr-surface);
   border: 1px solid var(--vr-border);
   border-radius: var(--vr-radius-panel);
   box-shadow: var(--vr-shadow-2);
 }
 
+.vr-community-hub__stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(11rem, 1.2fr);
+  align-items: center;
+  gap: clamp(var(--vr-space-4), 6%, var(--vr-space-10));
+  inline-size: min(100%, 28rem);
+  min-block-size: 8.5rem;
+  margin-inline: auto;
+}
+
 .vr-community-hub__orbit {
   position: absolute;
   inset-block-start: 50%;
-  inset-inline-start: 4.5rem;
-  inline-size: 12rem;
-  block-size: 7rem;
+  inset-inline-start: 50%;
+  inline-size: min(82%, 22rem);
+  block-size: min(76%, 7rem);
   border: 1px dashed color-mix(in srgb, var(--vr-action) 28%, transparent);
   border-radius: 50%;
-  transform: translateY(-50%) rotate(-8deg);
+  transform: translate(-50%, -50%) rotate(-8deg);
 }
 
 .vr-community-hub__center,
@@ -222,32 +230,20 @@
 }
 
 .vr-community-hub__people {
-  justify-self: end;
+  justify-self: center;
 }
 
 @media (max-width: 32rem) {
-  .vr-identity-capsule {
-    grid-template-columns: auto minmax(0, 1fr) auto;
-  }
-
-  .vr-identity-capsule__status {
-    grid-column: 2;
-  }
-
-  .vr-identity-capsule__action {
-    grid-column: 3;
-    grid-row: 1 / span 2;
-  }
-
-  .vr-community-hub {
+  .vr-community-hub__stage {
     grid-template-columns: minmax(0, 1fr);
     justify-items: center;
+    gap: var(--vr-space-5);
+    min-block-size: 14rem;
   }
 
   .vr-community-hub__orbit {
-    inset-block-start: 7rem;
-    inset-inline-start: 50%;
-    transform: translateX(-50%) rotate(-8deg);
+    inline-size: min(90%, 16rem);
+    block-size: 10rem;
   }
 
   .vr-community-hub__people {

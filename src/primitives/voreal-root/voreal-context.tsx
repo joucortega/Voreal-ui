@@ -2,7 +2,7 @@
 
 import { createContext, useContext, type ReactNode } from "react";
 
-export type VorealBuiltInTheme = "neutral" | "red-latina";
+export type VorealBuiltInTheme = "mercado-nocturno" | "neutral" | "red-latina";
 export type VorealTheme = VorealBuiltInTheme | (string & Record<never, never>);
 export type VorealDensity = "comfortable" | "compact";
 

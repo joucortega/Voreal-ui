@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { ArrowRightIcon, LayoutGridIcon, ListIcon, LocateFixedIcon, MoreHorizontalIcon } from "../../icons";
 import { Button, ButtonGroup, IconButton } from "./button";
 import {
   ActionRail,
@@ -63,7 +64,7 @@ export const HoverSimulation: Story = {
       <span style={{ color: "var(--vr-text-muted)", fontSize: "var(--vr-text-sm)" }}>
         Mueve el cursor para inspeccionar elevación, color y desplazamiento de 2px.
       </span>
-      <Button endIcon="→">Pasa el cursor aquí</Button>
+      <Button endIcon={<ArrowRightIcon />}>Pasa el cursor aquí</Button>
     </div>
   ),
 };
@@ -74,7 +75,7 @@ export const ConnectedButtons: Story = {
       <Button variant="secondary">Editar</Button>
       <Button variant="secondary">Duplicar</Button>
       <IconButton label="Más opciones" variant="secondary">
-        •••
+        <MoreHorizontalIcon />
       </IconButton>
     </ButtonGroup>
   ),
@@ -92,9 +93,9 @@ export const SignatureActions: Story = {
       <ActionRail
         defaultValue="list"
         items={[
-          { value: "list", label: "Lista", icon: "☷" },
-          { value: "map", label: "Mapa", icon: "⌖" },
-          { value: "grid", label: "Cuadrícula", icon: "▦" },
+          { value: "list", label: "Lista", icon: <ListIcon /> },
+          { value: "map", label: "Mapa", icon: <LocateFixedIcon /> },
+          { value: "grid", label: "Cuadrícula", icon: <LayoutGridIcon /> },
         ]}
         label="Vista de resultados"
       />
@@ -127,7 +128,7 @@ export const CompactAdminDensity: Story = {
         Guardar borrador
       </Button>
       <IconButton density="compact" label="Más acciones" variant="ghost">
-        •••
+        <MoreHorizontalIcon />
       </IconButton>
     </div>
   ),

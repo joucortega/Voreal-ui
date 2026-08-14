@@ -26,3 +26,4 @@ export {
   type HeadingProps,
   type TextProps,
 } from "./typography/typography";
+export type { VorealLinkComponent, VorealLinkProps } from "./link";

@@ -46,7 +46,7 @@ export type DirectoryFilter = {
 };
 
 export type DirectoryCategory = {
-  icon?: string;
+  icon?: ReactNode;
   label: string;
   value: string;
 };
@@ -55,3 +55,4 @@ export type DirectorySearchValue = {
   location: string;
   query: string;
 };
+import type { ReactNode } from "react";

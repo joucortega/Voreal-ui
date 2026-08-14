@@ -15,6 +15,14 @@
   line-height: var(--vr-leading-md);
 }
 
+:where(.vr-root, [data-vr-root], [data-vr-portal]) .vr-icon {
+  display: inline-block;
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+  vertical-align: -0.125em;
+}
+
 :where(.vr-root, [data-vr-root], [data-vr-portal]) :where(h1, h2, h3, h4, h5, h6) {
   color: var(--vr-text-strong);
   font-family: var(--vr-font-heading);

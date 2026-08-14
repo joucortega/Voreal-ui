@@ -2,7 +2,8 @@
   --vr-surface-overlay: var(--vr-surface-raised);
   --vr-text-strong: var(--vr-text);
   --vr-text-subtle: var(--vr-text-muted);
-  --vr-link: var(--vr-action);
+  --vr-action-foreground: var(--vr-action);
+  --vr-link: var(--vr-action-foreground);
   --vr-link-hover: var(--vr-action-hover);
   --vr-input-background: var(--vr-surface);
   --vr-input-border: var(--vr-border-strong);

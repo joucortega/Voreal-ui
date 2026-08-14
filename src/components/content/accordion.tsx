@@ -2,6 +2,7 @@
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import type { ReactNode } from "react";
+import { ChevronDownIcon } from "../../icons";
 import { cn } from "../../utilities/cn";
 
 export type AccordionItem = {
@@ -23,7 +24,7 @@ export function Accordion({ className, items, ...props }: AccordionProps) {
           <AccordionPrimitive.Header className="vr-accordion__header">
             <AccordionPrimitive.Trigger className="vr-accordion__trigger">
               <span>{item.title}</span>
-              <span aria-hidden="true" className="vr-accordion__icon">⌄</span>
+              <span aria-hidden="true" className="vr-accordion__icon"><ChevronDownIcon /></span>
             </AccordionPrimitive.Trigger>
           </AccordionPrimitive.Header>
           <AccordionPrimitive.Content className="vr-accordion__content">

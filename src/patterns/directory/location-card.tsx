@@ -1,5 +1,6 @@
 import type { HTMLAttributes } from "react";
 import { Card } from "../../components/content";
+import { MapPinIcon } from "../../icons";
 import { cn } from "../../utilities/cn";
 
 export type LocationCardProps = HTMLAttributes<HTMLDivElement> & {
@@ -18,7 +19,7 @@ export function LocationCard({
   return (
     <Card {...props} className={cn("vr-location-card", className)} padding="none">
       <div aria-label={mapLabel} className="vr-location-card__map" role="img">
-        <span aria-hidden="true">⌖</span>
+        <MapPinIcon />
       </div>
       <div className="vr-location-card__body">
         <strong>Ubicación</strong>

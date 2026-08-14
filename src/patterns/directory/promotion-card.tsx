@@ -1,4 +1,5 @@
 import { Badge, Card } from "../../components/content";
+import { ArrowRightIcon } from "../../icons";
 import type { BusinessPromotion } from "./types";
 
 export type PromotionCardProps = { promotion: BusinessPromotion };
@@ -9,7 +10,7 @@ export function PromotionCard({ promotion }: PromotionCardProps) {
       <Badge variant="accent">{promotion.eyebrow ?? "Promoción"}</Badge>
       <h3>{promotion.title}</h3>
       {promotion.description ? <p>{promotion.description}</p> : null}
-      {promotion.href ? <a href={promotion.href}>Ver promoción <span aria-hidden="true">→</span></a> : null}
+      {promotion.href ? <a href={promotion.href}>Ver promoción <ArrowRightIcon /></a> : null}
     </Card>
   );
 }

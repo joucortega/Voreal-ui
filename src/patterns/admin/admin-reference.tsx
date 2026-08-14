@@ -6,6 +6,7 @@ import { DataTable, type DataTableColumn, type DataTableSort, StatCard } from ".
 import { Alert, ErrorState } from "../../components/feedback";
 import { Field, Input, Select, Switch, Textarea } from "../../components/form";
 import { Breadcrumbs } from "../../components/navigation";
+import { BuildingIcon, HomeIcon, ShapesIcon, SparklesIcon } from "../../icons";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -102,10 +103,10 @@ export function AdminReference({ empty = false, error = false, loading = false }
       brand={<span><strong>Voreal</strong><small>Administración</small></span>}
       current="businesses"
       items={[
-        { href: "/admin", icon: "⌂", label: "Resumen", value: "overview" },
-        { href: "/admin/negocios", icon: "▦", label: "Negocios", value: "businesses" },
-        { href: "/admin/categorias", icon: "◇", label: "Categorías", value: "categories" },
-        { href: "/admin/promociones", icon: "✦", label: "Promociones", value: "promotions" },
+        { href: "/admin", icon: <HomeIcon />, label: "Resumen", value: "overview" },
+        { href: "/admin/negocios", icon: <BuildingIcon />, label: "Negocios", value: "businesses" },
+        { href: "/admin/categorias", icon: <ShapesIcon />, label: "Categorías", value: "categories" },
+        { href: "/admin/promociones", icon: <SparklesIcon />, label: "Promociones", value: "promotions" },
       ]}
       utility={<a href="/">Ver directorio público</a>}
     >

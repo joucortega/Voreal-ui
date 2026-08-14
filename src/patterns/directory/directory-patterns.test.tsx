@@ -21,6 +21,10 @@ const business: BusinessSummary = {
   status: { label: "Abierto ahora", tone: "success" },
 };
 
+function RouterLink({ children, href, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  return <a {...props} data-router-link="true" href={href}>{children}</a>;
+}
+
 it("keeps status, name, category, location, and actions in every card variant", () => {
   for (const variant of ["vertical", "horizontal", "compact", "featured"] as const) {
     const { unmount } = renderVoreal(<BusinessCard business={business} variant={variant} />);
@@ -31,6 +35,20 @@ it("keeps status, name, category, location, and actions in every card variant", 
     expect(screen.getByRole("link", { name: `Ver ${business.name}` })).toHaveAttribute("href", business.href);
     unmount();
   }
+});
+
+it("routes BusinessCard through a framework link and accepts optimized media", () => {
+  renderVoreal(
+    <BusinessCard
+      LinkComponent={RouterLink}
+      business={business}
+      media={<div data-testid="optimized-business-image">Next Image</div>}
+    />,
+  );
+
+  expect(screen.getByRole("link", { name: `Ver ${business.name}` })).toHaveAttribute("data-router-link", "true");
+  expect(screen.getByTestId("optimized-business-image")).toBeVisible();
+  expect(screen.queryByRole("img", { name: business.image?.alt })).not.toBeInTheDocument();
 });
 
 it("uses one serializable value for search entry", async () => {
