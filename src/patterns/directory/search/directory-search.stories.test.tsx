@@ -1,9 +1,20 @@
+import { render, waitFor } from "@testing-library/react";
 import { expect, it } from "vitest";
-import {
+import directorySearchMeta, {
   getCanonicalConfirmedDirectorySearch,
   Mobile375,
   Tablet768,
 } from "./directory-search.stories";
+
+it("signals when the interactive directory search story is ready", async () => {
+  const DirectorySearchStory = directorySearchMeta.component;
+
+  render(<DirectorySearchStory />);
+
+  await waitFor(() => {
+    expect(document.querySelector("[data-vr-story-ready='true']")).toBeInTheDocument();
+  });
+});
 
 it("uses an exact 375px viewport for the Mobile375 story", () => {
   expect(Mobile375.parameters?.viewport).toMatchObject({

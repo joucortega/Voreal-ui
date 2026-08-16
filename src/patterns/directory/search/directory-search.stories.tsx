@@ -75,6 +75,17 @@ const unconfirmedSearch: DirectorySearchState = {
   page: 1,
 };
 
+function StoryReadySignal() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setReady(true), 0);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  return <span aria-hidden="true" data-vr-story-ready={ready ? "true" : "false"} hidden />;
+}
+
 export function getCanonicalConfirmedDirectorySearch(search: string): string {
   const state = parseDirectorySearchParams(new URLSearchParams(search));
   const hasConfirmedCriteria = Boolean(
@@ -129,25 +140,28 @@ function SearchHistoryFixture({
   };
 
   return (
-    <main className="vr-directory-search-story">
-      <DirectorySearchForm
-        action="/directorio"
-        defaultValue={confirmedValue}
-        key={confirmed || "unconfirmed"}
-        onSubmit={handleSubmit}
-        queryControl={(
-          <DirectorySearchSuggestions
-            aria-label="¿Qué buscas?"
-            debounceMs={debounceMs}
-            defaultValue={confirmedValue.query}
-            loadSuggestions={usableLoader}
-            name="q"
-            onNavigate={(href) => setSelectedHref(`href=${href}`)}
-          />
-        )}
-      />
-      <output data-testid="confirmed-search">{selectedHref || confirmed || "Sin búsqueda confirmada"}</output>
-    </main>
+    <>
+      <StoryReadySignal />
+      <main className="vr-directory-search-story">
+        <DirectorySearchForm
+          action="/directorio"
+          defaultValue={confirmedValue}
+          key={confirmed || "unconfirmed"}
+          onSubmit={handleSubmit}
+          queryControl={(
+            <DirectorySearchSuggestions
+              aria-label="¿Qué buscas?"
+              debounceMs={debounceMs}
+              defaultValue={confirmedValue.query}
+              loadSuggestions={usableLoader}
+              name="q"
+              onNavigate={(href) => setSelectedHref(`href=${href}`)}
+            />
+          )}
+        />
+        <output data-testid="confirmed-search">{selectedHref || confirmed || "Sin búsqueda confirmada"}</output>
+      </main>
+    </>
   );
 }
 
@@ -197,7 +211,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const ServerFallback: Story = {
-  render: () => <DirectorySearchForm action="/directorio" defaultValue={{ location: "Baltimore, MD", page: 1 }} />,
+  render: () => (
+    <>
+      <StoryReadySignal />
+      <DirectorySearchForm action="/directorio" defaultValue={{ location: "Baltimore, MD", page: 1 }} />
+    </>
+  ),
 };
 
 export const ProgressiveSuggestions: Story = {};
