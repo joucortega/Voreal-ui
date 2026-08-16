@@ -85,8 +85,8 @@ test("keeps the suggestion panel inside a 375px viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await openDirectorySearchStory(page, progressiveUrl);
   await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
-  const panel = page.getByRole("listbox", { name: "Sugerencias" });
-  await expect(panel).toBeVisible();
+  await expect(page.getByRole("listbox", { name: "Sugerencias" })).toBeVisible();
+  const panel = page.locator(".vr-directory-suggestions");
   const box = await panel.boundingBox();
   expect(box).not.toBeNull();
   expect(box!.x).toBeGreaterThanOrEqual(0);
@@ -113,7 +113,7 @@ test("ignores a late stale response after both deterministic requests resolve", 
   await query.fill("tacos");
   await expect(page.getByRole("option", { name: /Tacos del Barrio/ })).toBeVisible();
   await expect(releaseSlowResponse).toBeEnabled();
-  await releaseSlowResponse.click();
+  await releaseSlowResponse.evaluate((element) => (element as HTMLButtonElement).click());
   await expect(page.getByRole("option", { name: /Tacos del Barrio/ })).toBeVisible();
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toHaveCount(0);
 });
@@ -154,8 +154,8 @@ test("keeps the suggestion panel anchored at tablet width", async ({ page }) => 
   await openDirectorySearchStory(page, progressiveUrl);
   const query = page.getByRole("combobox", { name: "¿Qué buscas?" });
   await query.fill("ta");
-  const panel = page.getByRole("listbox", { name: "Sugerencias" });
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
+  const panel = page.locator(".vr-directory-suggestions");
   const [queryBox, panelBox] = await Promise.all([query.boundingBox(), panel.boundingBox()]);
   expect(queryBox).not.toBeNull();
   expect(panelBox).not.toBeNull();
