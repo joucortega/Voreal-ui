@@ -1,6 +1,6 @@
 {
   "name": "@voreal/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "sideEffects": [
@@ -28,6 +28,9 @@
     "./primitives": "./src/primitives/index.ts",
     "./patterns/admin": "./src/patterns/admin/index.ts",
     "./patterns/directory": "./src/patterns/directory/index.ts",
+    "./patterns/directory/search-form": "./src/patterns/directory/search/directory-search-form.tsx",
+    "./patterns/directory/search-suggestions": "./src/patterns/directory/search/directory-search-suggestions.tsx",
+    "./patterns/directory/search-state": "./src/patterns/directory/search/directory-search-state.ts",
     "./styles.css": "./src/styles/index.css",
     "./theme/neutral.css": "./src/themes/neutral.css",
     "./theme/mercado-nocturno.css": "./src/themes/mercado-nocturno.css",
@@ -48,7 +51,8 @@
     "test:e2e": "playwright test",
     "lint:css": "stylelint 'src/**/*.css'",
     "audit:css": "node scripts/audit-css.mjs",
-    "budget:css": "node scripts/check-css-budget.mjs"
+    "budget:css": "node scripts/check-css-budget.mjs",
+    "budget:search-css": "node scripts/check-css-budget.mjs src/patterns/directory/search/directory-search.css 3072"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",

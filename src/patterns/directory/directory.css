@@ -1,53 +1,3 @@
-.vr-directory-search {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) auto minmax(0, 0.8fr) auto;
-  align-items: center;
-  gap: var(--vr-space-2);
-  inline-size: min(100%, 62rem);
-  padding: var(--vr-space-2);
-  background: var(--vr-surface);
-  border: 1px solid var(--vr-border);
-  border-radius: var(--vr-radius-pill);
-  box-shadow: var(--vr-shadow-2);
-}
-
-.vr-directory-search__field {
-  display: grid;
-  gap: var(--vr-space-1);
-  min-inline-size: 0;
-  padding-inline: var(--vr-space-3);
-}
-
-.vr-directory-search__label {
-  color: var(--vr-text-strong);
-  font-size: var(--vr-text-xs);
-  font-weight: var(--vr-font-weight-bold);
-}
-
-.vr-directory-search__input {
-  min-block-size: auto;
-  padding: 0;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.vr-directory-search__input:focus-visible {
-  outline: none;
-  box-shadow: none;
-}
-
-.vr-directory-search__divider {
-  inline-size: 1px;
-  block-size: 2.5rem;
-  background: var(--vr-border);
-}
-
-.vr-directory-search__submit {
-  border-radius: var(--vr-radius-pill);
-}
-
 .vr-category-scroller {
   display: flex;
   gap: var(--vr-space-2);
@@ -442,20 +392,6 @@
 }
 
 @media (max-width: 48rem) {
-  .vr-directory-search {
-    grid-template-columns: minmax(0, 1fr);
-    border-radius: var(--vr-radius-panel);
-  }
-
-  .vr-directory-search__divider {
-    inline-size: 100%;
-    block-size: 1px;
-  }
-
-  .vr-directory-search__submit {
-    inline-size: 100%;
-  }
-
   .vr-business-card[data-variant="horizontal"] {
     grid-template-columns: minmax(8rem, 0.4fr) minmax(0, 1fr);
   }

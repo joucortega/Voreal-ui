@@ -1,6 +1,6 @@
 # Voreal UI
 
-Voreal UI `0.1.0` es un sistema visual React reutilizable para directorios modernos. La identidad principal es **Mercado contemporáneo** de Red Latina 360: marfil cálido, azul profundo, coral de acción y verde comunitario, sin mezclar la dirección morada/naranja descartada. `mercado-nocturno` ofrece una variante oscura del mismo lenguaje visual.
+Voreal UI `0.2.0` es un sistema visual React reutilizable para directorios modernos. La identidad principal es **Mercado contemporáneo** de Red Latina 360: marfil cálido, azul profundo, coral de acción y verde comunitario, sin mezclar la dirección morada/naranja descartada. `mercado-nocturno` ofrece una variante oscura del mismo lenguaje visual.
 
 El paquete combina CSS encapsulado y tokens semánticos, Tailwind CSS v4 para utilidades acotadas, y Radix Primitives para interacción accesible. Incluye componentes base, patrones públicos de directorio y una superficie administrativa compacta.
 
@@ -31,6 +31,8 @@ cp -R ../Voreal-ui/src/. src/voreal/
 ```
 
 Esto conserva imports relativos, tokens, temas, portales y estilos. El archivo público será `src/voreal/index.ts` y el CSS `src/voreal/styles/index.css`.
+
+Para consumir Voreal desde otro repositorio, fija una versión, etiqueta o commit verificado; no apuntes a `main`. Este paquete conserva `private: true` y no se publica en npm.
 
 ## Orden exacto de estilos
 
@@ -114,6 +116,88 @@ import { BusinessCard } from "@voreal/ui/patterns/directory";
 
 `AdminShell` acepta el mismo `LinkComponent`. Para tarjetas genéricas usa `<CardLink asChild><Link href="…">…</Link></CardLink>`. Consulta [Integración con Next.js](docs/NEXTJS.md).
 
+## Búsqueda de directorio server-first
+
+El formulario de búsqueda es server-safe y usa `GET`, de modo que el directorio funciona sin JavaScript. En un Server Component de Next.js, convierte los parámetros, interpreta los nombres canónicos (`q`, `location`, `category`, `sort`, `page`) y entrega el estado al formulario:
+
+```tsx
+import {
+  parseDirectorySearchParams,
+} from "@voreal/ui/patterns/directory/search-state";
+import {
+  DirectorySearchForm,
+} from "@voreal/ui/patterns/directory/search-form";
+
+export default async function DirectoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const resolved = await searchParams;
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(resolved)) {
+    if (typeof value === "string") params.set(key, value);
+  }
+  const search = parseDirectorySearchParams(params);
+
+  return (
+    <>
+      <DirectorySearchForm action="/directorio" defaultValue={search} />
+      <p>{search.query ? `Resultados para ${search.query}` : "Explora negocios"}</p>
+    </>
+  );
+}
+```
+
+Las sugerencias son una mejora opcional de cliente. Compón `DirectorySearchSuggestions` en `queryControl`; el cargador recibe un `AbortSignal`, que debe reenviarse a `fetch` para cancelar solicitudes sustituidas:
+
+```tsx
+"use client";
+
+import { DirectorySearchForm } from "@voreal/ui/patterns/directory/search-form";
+import { DirectorySearchSuggestions } from "@voreal/ui/patterns/directory/search-suggestions";
+import type {
+  DirectorySearchState,
+  DirectorySuggestionGroup,
+  DirectorySuggestionLoader,
+} from "@voreal/ui/patterns/directory";
+
+const loadSuggestions: DirectorySuggestionLoader = async (request, signal) => {
+  const params = new URLSearchParams({
+    q: request.query,
+    location: request.location,
+  });
+  if (request.category) params.set("category", request.category);
+  const response = await fetch(`/api/directory/suggestions?${params}`, { signal });
+  if (!response.ok) throw { kind: "network", code: `HTTP_${response.status}` };
+  return response.json() as Promise<readonly DirectorySuggestionGroup[]>;
+};
+
+export function DirectorySearchWithSuggestions({
+  initialSearch,
+}: {
+  initialSearch: DirectorySearchState;
+}) {
+  return (
+    <DirectorySearchForm
+      action="/directorio"
+      defaultValue={initialSearch}
+      queryControl={(
+        <DirectorySearchSuggestions
+          defaultValue={initialSearch.query}
+          loadSuggestions={loadSuggestions}
+          name="q"
+        />
+      )}
+    />
+  );
+}
+```
+
+Desde el Server Component, pasa el mismo estado ya interpretado: `<DirectorySearchWithSuggestions initialSearch={search} />`. Así una visita directa o un enlace compartido restaura tanto el formulario como la consulta controlada de sugerencias; `defaultValue` solo establece ese estado inicial y el envío `GET` sigue siendo la confirmación canónica.
+
+El host decide si consume `onSearchEvent` para su analítica. Los eventos y diagnósticos locales tipados de Voreal no incluyen `raw query text` (texto de consulta sin procesar); no envíes la consulta a telemetría salvo que tu política de privacidad lo permita.
+
 ## Tablas en servidor y cliente
 
 - `StaticDataTable` no incluye eventos y puede renderizarse desde un Server Component.
@@ -142,6 +226,7 @@ pnpm audit:css
 pnpm build
 pnpm build-storybook
 pnpm test:e2e
+pnpm budget:search-css
 pnpm budget:css
 ```
 
