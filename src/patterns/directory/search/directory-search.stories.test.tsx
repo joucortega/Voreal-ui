@@ -1,4 +1,4 @@
-import { render, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { expect, it } from "vitest";
 import directorySearchMeta, {
   getCanonicalConfirmedDirectorySearch,
@@ -14,6 +14,15 @@ it("signals when the interactive directory search story is ready", async () => {
   await waitFor(() => {
     expect(document.querySelector("[data-vr-story-ready='true']")).toBeInTheDocument();
   });
+});
+
+it("loads suggestions after a direct input event", async () => {
+  const DirectorySearchStory = directorySearchMeta.component;
+
+  render(<DirectorySearchStory />);
+  fireEvent.input(screen.getByRole("combobox", { name: "¿Qué buscas?" }), { target: { value: "ta" } });
+
+  expect(await screen.findByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
 });
 
 it("uses an exact 375px viewport for the Mobile375 story", () => {

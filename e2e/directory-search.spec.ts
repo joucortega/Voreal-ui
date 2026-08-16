@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
 import axe from "axe-core";
 
 const progressiveUrl = "/iframe.html?id=patterns-directory-search--progressive-suggestions&viewMode=story";
@@ -20,6 +20,12 @@ async function openDirectorySearchStory(page: Page, url: string) {
   await expect(page.locator("[data-vr-story-ready]")).toHaveAttribute("data-vr-story-ready", "true");
 }
 
+async function replaceDirectoryQuery(query: Locator, value: string) {
+  await query.press("ControlOrMeta+A");
+  await query.pressSequentially(value);
+  await expect(query).toHaveValue(value);
+}
+
 async function expectVisibleFocus(locator: import("@playwright/test").Locator) {
   await expect(locator).toBeFocused();
   const focus = await locator.evaluate((element) => {
@@ -33,7 +39,7 @@ async function expectVisibleFocus(locator: import("@playwright/test").Locator) {
 test("uses suggestions but keeps native submit and history canonical", async ({ page }) => {
   await openDirectorySearchStory(page, progressiveUrl);
   const query = page.getByRole("combobox", { name: "¿Qué buscas?" });
-  await query.fill("ta");
+  await replaceDirectoryQuery(query, "ta");
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(query).toHaveValue("ta");
@@ -84,7 +90,7 @@ test("submits canonical fields through the fallback form's native GET request", 
 test("keeps the suggestion panel inside a 375px viewport", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await openDirectorySearchStory(page, progressiveUrl);
-  await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
+  await replaceDirectoryQuery(page.getByRole("combobox", { name: "¿Qué buscas?" }), "ta");
   const panel = page.getByRole("listbox", { name: "Sugerencias" });
   await expect(panel).toBeVisible();
   const box = await panel.boundingBox();
@@ -97,7 +103,7 @@ test("keeps the suggestion panel inside a 375px viewport", async ({ page }) => {
 test("moves the active option with arrow keys while input focus remains on the combobox", async ({ page }) => {
   await openDirectorySearchStory(page, progressiveUrl);
   const query = page.getByRole("combobox", { name: "¿Qué buscas?" });
-  await query.fill("ta");
+  await replaceDirectoryQuery(query, "ta");
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
   await page.keyboard.press("ArrowDown");
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toHaveAttribute("aria-selected", "true");
@@ -107,10 +113,10 @@ test("moves the active option with arrow keys while input focus remains on the c
 test("ignores a late stale response after both deterministic requests resolve", async ({ page }) => {
   await openDirectorySearchStory(page, outOfOrderUrl);
   const query = page.getByRole("combobox", { name: "¿Qué buscas?" });
-  await query.fill("ta");
+  await replaceDirectoryQuery(query, "ta");
   const releaseSlowResponse = page.getByTestId("out-of-order-slow-response");
   await expect(releaseSlowResponse).toHaveAttribute("data-slow-request-observed", "true");
-  await query.fill("tacos");
+  await replaceDirectoryQuery(query, "tacos");
   await expect(page.getByRole("option", { name: /Tacos del Barrio/ })).toBeVisible();
   await expect(releaseSlowResponse).toBeEnabled();
   await releaseSlowResponse.click();
@@ -121,7 +127,7 @@ test("ignores a late stale response after both deterministic requests resolve", 
 test("keeps the native form usable after a suggestion error", async ({ page }) => {
   await openDirectorySearchStory(page, "/iframe.html?id=patterns-directory-search--error&viewMode=story");
   const query = page.getByRole("combobox", { name: "¿Qué buscas?" });
-  await query.fill("ta");
+  await replaceDirectoryQuery(query, "ta");
   await expect(page.getByText("Las sugerencias no están disponibles. Aún puedes buscar")).toBeVisible();
   await page.getByRole("button", { name: "Buscar" }).click();
   await expect(page.getByTestId("confirmed-search")).toContainText("q=ta");
@@ -131,7 +137,7 @@ for (const theme of ["red-latina", "mercado-nocturno", "neutral"]) {
   test(`has no WCAG AA violations in ${theme}`, async ({ page }) => {
     await openDirectorySearchStory(page, `${progressiveUrl}&globals=theme:${theme}`);
     await page.addScriptTag({ content: axe.source });
-    await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
+    await replaceDirectoryQuery(page.getByRole("combobox", { name: "¿Qué buscas?" }), "ta");
     await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
     const violations = await page.evaluate(async () => {
       const results = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } });
@@ -144,7 +150,7 @@ for (const theme of ["red-latina", "mercado-nocturno", "neutral"]) {
 test("uses compact density for both the search and its portalled suggestions", async ({ page }) => {
   await openDirectorySearchStory(page, "/iframe.html?id=patterns-directory-search--compact&viewMode=story");
   await expect(page.locator('[data-vr-density="compact"] .vr-directory-search')).toBeVisible();
-  await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
+  await replaceDirectoryQuery(page.getByRole("combobox", { name: "¿Qué buscas?" }), "ta");
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
   await expect(page.locator('[data-vr-portal][data-vr-density="compact"]')).toBeVisible();
 });
@@ -153,7 +159,7 @@ test("keeps the suggestion panel anchored at tablet width", async ({ page }) => 
   await page.setViewportSize({ width: 768, height: 1024 });
   await openDirectorySearchStory(page, progressiveUrl);
   const query = page.getByRole("combobox", { name: "¿Qué buscas?" });
-  await query.fill("ta");
+  await replaceDirectoryQuery(query, "ta");
   const panel = page.getByRole("listbox", { name: "Sugerencias" });
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
   const [queryBox, panelBox] = await Promise.all([query.boundingBox(), panel.boundingBox()]);
@@ -167,7 +173,7 @@ test("keeps long suggestion content usable at 200 percent text sizing", async ({
   await page.setViewportSize({ width: 1280, height: 900 });
   await openDirectorySearchStory(page, "/iframe.html?id=patterns-directory-search--long-content&viewMode=story");
   await page.evaluate(() => { document.documentElement.style.fontSize = "200%"; });
-  await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
+  await replaceDirectoryQuery(page.getByRole("combobox", { name: "¿Qué buscas?" }), "ta");
   const option = page.getByRole("option", { name: /Centro Comunitario de Servicios Integrales/ });
   await expect(option).toBeVisible();
   await expect(option).toContainText("comunidades vecinas");
@@ -183,7 +189,7 @@ test("keeps long suggestion content usable at 200 percent text sizing", async ({
 test("remains functional with reduced motion", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await openDirectorySearchStory(page, progressiveUrl);
-  await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
+  await replaceDirectoryQuery(page.getByRole("combobox", { name: "¿Qué buscas?" }), "ta");
   await expect(page.getByRole("listbox", { name: "Sugerencias" })).toBeVisible();
   await page.keyboard.press("ArrowDown");
   await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toHaveAttribute("aria-selected", "true");
