@@ -133,6 +133,7 @@ for (const theme of ["red-latina", "mercado-nocturno", "neutral"]) {
     await page.addScriptTag({ content: axe.source });
     await page.getByRole("combobox", { name: "¿Qué buscas?" }).fill("ta");
     await expect(page.getByRole("option", { name: /Sabor de Casa/ })).toBeVisible();
+    await expect(page.locator(".vr-directory-suggestions")).toHaveCSS("opacity", "1");
     const violations = await page.evaluate(async () => {
       const results = await window.axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"] } });
       return results.violations.map(({ id, impact, nodes }) => ({ id, impact, nodes: nodes.length }));
