@@ -79,7 +79,10 @@ export function DirectorySearchSuggestions({
   useEffect(() => {
     const form = inputRef.current?.form;
     if (!form) return;
-    const refreshRequest = () => setFormRevision((value) => value + 1);
+    const refreshRequest = (event: Event) => {
+      if (event.target === inputRef.current) return;
+      setFormRevision((value) => value + 1);
+    };
     form.addEventListener("input", refreshRequest);
     form.addEventListener("change", refreshRequest);
     return () => { form.removeEventListener("input", refreshRequest); form.removeEventListener("change", refreshRequest); };
