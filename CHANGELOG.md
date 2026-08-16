@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.2.0 — 2026-08-16
+
+### Añadido
+
+- Formulario de búsqueda `GET` server-safe y utilidades de estado para parámetros de URL canónicos.
+- Sugerencias agrupadas opcionales, cancelables mediante `AbortSignal` y con debounce.
+- Estados de usuario concisos y diagnósticos locales tipados que no incluyen texto de consulta sin procesar por defecto.
+- Entry points dedicados para consumo server-safe y cliente.
+- Cobertura de Storybook y Playwright para búsqueda de directorio.
+
+### Compatibilidad
+
+- No hay cambio incompatible: no breaking change to `DirectorySearch`, `DirectorySearchProps` ni `DirectorySearchValue`.
+- El paquete sigue siendo `private: true`; no se publica en npm. Las aplicaciones consumidoras deben fijar una etiqueta, versión o commit verificado, y no seguir `main`.
+
 ## Próxima versión
 
 ### Corregido

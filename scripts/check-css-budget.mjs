@@ -1,4 +1,4 @@
-import { readFile, readdir } from "node:fs/promises";
+import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
@@ -32,23 +32,52 @@ async function listCssFiles(root) {
   return files;
 }
 
+export async function readCssSource(inputPath) {
+  const input = await stat(inputPath);
+  if (input.isFile()) {
+    const source = await readFile(inputPath, "utf8");
+    if (source.trim().length === 0) throw new Error(`No hay archivos CSS en ${inputPath}.`);
+    return source;
+  }
+  if (!input.isDirectory()) {
+    throw new Error(`La entrada CSS debe ser un archivo o directorio: ${inputPath}.`);
+  }
+
+  const files = (await listCssFiles(inputPath)).sort();
+  if (files.length === 0) throw new Error(`No hay archivos CSS en ${inputPath}.`);
+  const source = (await Promise.all(files.map((file) => readFile(file, "utf8")))).join("\n");
+  if (source.trim().length === 0) throw new Error(`No hay archivos CSS en ${inputPath}.`);
+  return source;
+}
+
 function formatKb(bytes) {
   return `${(bytes / 1024).toFixed(2)} KB`;
 }
 
-async function main() {
-  const outputRoot = path.resolve(process.argv[2] ?? "storybook-static/assets");
-  let files;
-  try {
-    files = (await listCssFiles(outputRoot)).sort();
-  } catch {
-    throw new Error(`No se encontró CSS compilado en ${outputRoot}. Ejecuta pnpm build-storybook primero.`);
-  }
-  if (files.length === 0) throw new Error(`No hay archivos CSS en ${outputRoot}.`);
+function isMissingCssSource(error) {
+  return (error && typeof error === "object" && "code" in error && error.code === "ENOENT")
+    || (error instanceof Error && error.message.startsWith("No hay archivos CSS en "));
+}
 
-  const source = (await Promise.all(files.map((file) => readFile(file, "utf8")))).join("\n");
-  const result = evaluateBudget({ ...measureCss(source), budgetBytes: defaultBudgetBytes });
-  console.log(`Voreal CSS budget · ${files.length} archivo${files.length === 1 ? "" : "s"}`);
+async function main() {
+  const inputPath = path.resolve(process.argv[2] ?? "storybook-static/assets");
+  const budgetBytes = Number.parseInt(process.argv[3] ?? String(defaultBudgetBytes), 10);
+  if (!Number.isFinite(budgetBytes) || budgetBytes <= 0) {
+    throw new Error("El presupuesto CSS debe ser un número positivo de bytes.");
+  }
+
+  let source;
+  try {
+    source = await readCssSource(inputPath);
+  } catch (error) {
+    if (isMissingCssSource(error)) {
+      throw new Error(`No se encontró CSS compilado en ${inputPath}. Ejecuta pnpm build-storybook primero.`);
+    }
+    throw error;
+  }
+
+  const result = evaluateBudget({ ...measureCss(source), budgetBytes });
+  console.log(`Voreal CSS budget · ${inputPath}`);
   console.log(`Raw: ${formatKb(result.rawBytes)} · Gzip: ${formatKb(result.gzipBytes)} · Budget: ${formatKb(result.budgetBytes)}`);
   if (!result.ok) {
     console.error(`El CSS gzip excede el presupuesto por ${formatKb(result.gzipBytes - result.budgetBytes)}.`);

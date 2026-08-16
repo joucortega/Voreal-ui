@@ -25,6 +25,7 @@
 @import "../components/content/content.css" layer(vr-components);
 @import "../components/data/data.css" layer(vr-components);
 @import "../patterns/directory/directory.css" layer(vr-components);
+@import "../patterns/directory/search/directory-search.css" layer(vr-components);
 @import "../patterns/admin/admin.css" layer(vr-components);
 
 @theme inline {
