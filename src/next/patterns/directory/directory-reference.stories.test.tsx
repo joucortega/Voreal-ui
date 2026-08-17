@@ -69,12 +69,28 @@ describe("Voreal Next directory reference stories", () => {
     for (const image of images) {
       expect(image).toHaveAttribute("width", "960");
       expect(image).toHaveAttribute("height", "640");
-      expect(image.src).toContain("/voreal-next/directory/");
+      expect(image.getAttribute("src")).toMatch(/^\.\/voreal-next\/directory\//);
     }
+    expect(screen.getByRole("link", { name: "Voreal, inicio" }).querySelector("img"))
+      .toHaveAttribute("src", "./voreal-next/brand/voreal-mark.png");
   });
 
   it("keeps the primary demo controls visibly controlled without navigation", () => {
     renderStory(Cards);
+
+    expect(screen.getByRole("link", { name: "Favoritos" }).querySelector("svg"))
+      .toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByText("MC")).toHaveClass("vrn-directory-header__avatar");
+    const accountLabel = screen.getByText("Mi cuenta");
+    expect(accountLabel).toHaveClass("vrn-directory-header__account-label");
+    expect(accountLabel).toHaveAttribute("data-visually-hidden", "true");
+
+    const query = screen.getByRole("searchbox", { name: "¿Qué buscas?" });
+    const location = screen.getByRole("textbox", { name: "¿Dónde?" });
+    fireEvent.click(screen.getByRole("button", { name: "Limpiar búsqueda" }));
+    fireEvent.click(screen.getByRole("button", { name: "Limpiar ubicación" }));
+    expect(query).toHaveValue("");
+    expect(location).toHaveValue("");
 
     fireEvent.change(screen.getByLabelText("Ordenar resultados"), { target: { value: "rating" } });
     expect(screen.getByRole("status")).toHaveTextContent("Orden actualizado");

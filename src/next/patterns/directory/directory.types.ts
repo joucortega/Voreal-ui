@@ -8,10 +8,12 @@ export type VorealNextLinkComponent = ElementType<VorealNextLinkProps>;
 
 export type NextDirectoryNavItem = {
   href: string;
+  icon?: ReactNode;
   label: string;
 };
 
 export type NextDirectoryHeaderProps = {
+  accountAvatarLabel?: string;
   accountLabel?: string;
   brand: ReactNode;
   descriptor?: string;
@@ -28,8 +30,12 @@ export type NextDirectorySearchValue = {
 export type NextDirectorySearchFormProps = Omit<FormHTMLAttributes<HTMLFormElement>, "defaultValue" | "method"> & {
   action: string;
   defaultValue: NextDirectorySearchValue;
+  /** Unique, valid HTML id stem for this form's query and location fields. */
+  fieldIdPrefix: string;
   loading?: boolean;
+  locationTrailingAction?: ReactNode;
   locationLabel?: string;
+  queryTrailingAction?: ReactNode;
   queryLabel?: string;
   submitLabel?: string;
 };

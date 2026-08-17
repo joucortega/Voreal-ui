@@ -22,6 +22,14 @@ function TestLink({ href, ...props }: VorealNextLinkProps) {
   return <a {...props} data-test-link="true" href={href} />;
 }
 
+function cssForMediaCondition(document: Document, condition: string) {
+  return Array.from(document.styleSheets)
+    .flatMap((sheet) => Array.from(sheet.cssRules))
+    .filter((rule) => rule.cssText.startsWith(`@media ${condition}`))
+    .map((rule) => rule.cssText)
+    .join(" ");
+}
+
 it("renders every slot in one predictable landmark structure", () => {
   renderNext(
     <NextDirectoryLayout
@@ -87,6 +95,29 @@ it("uses a minmax grid and the approved responsive column breakpoints", () => {
   expect(css).toMatch(/repeat\(3, minmax\(0, 1fr\)\)/);
 });
 
+it("lets compact control groups reflow when mobile text is enlarged", () => {
+  const { container } = renderNext(<NextDirectoryCardGrid data-testid="grid" />);
+  const mobileCss = cssForMediaCondition(container.ownerDocument, "(width < 48rem)");
+
+  expect(mobileCss).toMatch(/\.vrn-directory-header__inner\s*\{[^}]*flex-wrap:\s*wrap/);
+  expect(mobileCss).toMatch(/\.vrn-directory-results__toolbar\s*\{[^}]*flex-wrap:\s*wrap/);
+  expect(mobileCss).toMatch(/\.vrn-directory-pagination__edges\s*\{[^}]*flex-wrap:\s*wrap/);
+});
+
+it("keeps the mobile results rhythm and pagination visually compact", () => {
+  const { container } = renderNext(
+    <NextDirectoryPagination currentPage={2} getPageHref={(page) => `/pagina/${page}`} pageCount={5} />,
+  );
+  const navigation = screen.getByRole("navigation", { name: "Paginación" });
+  const mobileCss = cssForMediaCondition(container.ownerDocument, "(width < 48rem)");
+
+  expect(getComputedStyle(navigation).display).toBe("flex");
+  expect(getComputedStyle(navigation).justifyContent).toBe("center");
+  expect(mobileCss).toMatch(/\.vrn-directory-results\s*\{[^}]*gap:\s*var\(--vrn-space-2\)/);
+  expect(mobileCss).toMatch(/\.vrn-directory-results\s*\{[^}]*padding-block:\s*var\(--vrn-space-3\)/);
+  expect(mobileCss).toMatch(/\.vrn-directory-results__filters-label,\s*\.vrn-directory-results__sort-label\s*\{[^}]*display:\s*none/);
+});
+
 it("uses crawlable page links, marks the current page and honors the link adapter", () => {
   renderNext(
     <NextDirectoryPagination
@@ -102,6 +133,10 @@ it("uses crawlable page links, marks the current page and honors the link adapte
   expect(pageThree).toHaveAttribute("data-test-link", "true");
   expect(screen.getByRole("link", { name: "Página 2" })).toHaveAttribute("aria-current", "page");
   expect(screen.getByRole("navigation", { name: "Paginación" })).toBeVisible();
+  expect(screen.getByText("Anterior")).toBeVisible();
+  expect(screen.getByText("Siguiente")).toBeVisible();
+  expect(screen.getByRole("link", { name: "Primera página" }).querySelectorAll("svg")).toHaveLength(2);
+  expect(screen.getByRole("link", { name: "Última página" }).querySelectorAll("svg")).toHaveLength(2);
   expect(screen.queryByRole("button")).not.toBeInTheDocument();
 });
 

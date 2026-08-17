@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { ChevronLeft, ChevronRight } from "../../icons";
 import type { VorealNextLinkComponent, VorealNextLinkProps } from "./directory.types";
 
 // Keeps labels compact and all neighbor arithmetic inside a predictable safe range.
@@ -48,19 +49,19 @@ export function NextDirectoryPagination({
   const page = normalizeCurrentPage(currentPage, normalizedPageCount);
   const pages = createPageWindow(page, normalizedPageCount);
 
-  function edgeControl(controlLabel: string, destination: number, disabled: boolean): ReactNode {
+  function edgeControl(controlLabel: string, content: ReactNode, destination: number, disabled: boolean): ReactNode {
     const className = "vrn-directory-pagination__control";
     if (disabled) {
-      return <span aria-disabled="true" className={className}>{controlLabel}</span>;
+      return <span aria-disabled="true" aria-label={controlLabel} className={className} role="link">{content}</span>;
     }
-    return <LinkComponent aria-label={controlLabel} className={className} href={getPageHref(destination)}>{controlLabel}</LinkComponent>;
+    return <LinkComponent aria-label={controlLabel} className={className} href={getPageHref(destination)}>{content}</LinkComponent>;
   }
 
   return (
     <nav aria-label={label} className="vrn-directory-pagination">
       <div className="vrn-directory-pagination__edges">
-        {edgeControl("Primera página", 1, page === 1)}
-        {edgeControl("Página anterior", page - 1, page === 1)}
+        {edgeControl("Primera página", <><ChevronLeft className="vrn-icon" /><ChevronLeft className="vrn-icon" /></>, 1, page === 1)}
+        {edgeControl("Página anterior", <><ChevronLeft className="vrn-icon" /><span>Anterior</span></>, page - 1, page === 1)}
       </div>
       <ol className="vrn-directory-pagination__pages">
         {pages.map((pageNumber, index) => {
@@ -83,8 +84,8 @@ export function NextDirectoryPagination({
         })}
       </ol>
       <div className="vrn-directory-pagination__edges">
-        {edgeControl("Página siguiente", page + 1, page === normalizedPageCount)}
-        {edgeControl("Última página", normalizedPageCount, page === normalizedPageCount)}
+        {edgeControl("Página siguiente", <><span>Siguiente</span><ChevronRight className="vrn-icon" /></>, page + 1, page === normalizedPageCount)}
+        {edgeControl("Última página", <><ChevronRight className="vrn-icon" /><ChevronRight className="vrn-icon" /></>, normalizedPageCount, page === normalizedPageCount)}
       </div>
     </nav>
   );

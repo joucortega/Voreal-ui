@@ -5,6 +5,18 @@ import { isNativeControlAppearanceVisible } from "./native-control-visibility";
 const referenceUrl = "/iframe.html?id=next-patterns-directory-reference--cards&viewMode=story";
 const storyUrl = (story: string) => `/iframe.html?id=next-patterns-directory-reference--${story}&viewMode=story`;
 const wcag22AaTags = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
+const longAccountLabel = "Administración de la cuenta comunitaria y preferencias de notificación";
+
+// The rejected CI capture started the first mobile card around 626px; 500px requires a
+// meaningful density recovery while leaving room for the native stacked search and 44px
+// controls. The 200px body reference gets 25px for font/rendering variance across engines,
+// and the 4px row tolerance absorbs subpixel rounding without accepting a wrapped facts row.
+const MOBILE_DENSITY_BUDGET = {
+  firstCardMaximumY: 500,
+  cardBodyMaximumHeight: 225,
+  interactiveTargetMinimumSize: 44,
+  factsRowMaximumVariance: 4,
+} as const;
 
 async function openReference(page: Page, url = referenceUrl) {
   await page.goto(url);
@@ -81,11 +93,13 @@ test("isolates the Next root and never widens the document", async ({ page }) =>
   await expectNoDocumentOverflow(page);
 });
 
-test("keeps native GET search names and query-location-submit Tab order", async ({ page }) => {
+test("keeps native GET names and the complete search-control Tab order", async ({ page }) => {
   await openReference(page);
   const form = page.getByRole("search", { name: "Buscar en el directorio" });
   const query = page.getByRole("searchbox", { name: "¿Qué buscas?" });
+  const clearQuery = page.getByRole("button", { name: "Limpiar búsqueda" });
   const location = page.getByRole("textbox", { name: "¿Dónde?" });
+  const clearLocation = page.getByRole("button", { name: "Limpiar ubicación" });
   const submit = page.getByRole("button", { name: "Buscar", exact: true });
 
   await expect(form).toHaveAttribute("method", "get");
@@ -95,7 +109,11 @@ test("keeps native GET search names and query-location-submit Tab order", async 
   await query.focus();
   await expectVisibleFocus(query);
   await page.keyboard.press("Tab");
+  await expectVisibleFocus(clearQuery);
+  await page.keyboard.press("Tab");
   await expectVisibleFocus(location);
+  await page.keyboard.press("Tab");
+  await expectVisibleFocus(clearLocation);
   await page.keyboard.press("Tab");
   await expectVisibleFocus(submit);
 });
@@ -130,6 +148,75 @@ test("shows only the desktop sidebar at the desktop breakpoint", async ({ page }
     if (viewport.visible) await expect(sidebar).toBeVisible();
     else await expect(sidebar).toBeHidden();
   }
+});
+
+for (const viewport of [
+  { height: 1024, width: 768 },
+  { height: 1100, width: 1440 },
+]) {
+  test(`keeps a long avatar account name hidden and contained at ${viewport.width}`, async ({ page }) => {
+    await page.setViewportSize(viewport);
+    await openReference(page);
+    const header = page.getByRole("banner");
+    const label = header.locator(
+      ".vrn-directory-header__desktop-nav .vrn-directory-header__account-label",
+    );
+    await label.evaluate((element, value) => { element.textContent = value; }, longAccountLabel);
+    await expect(label).toHaveText(longAccountLabel);
+
+    const geometry = await label.evaluate((element) => {
+      const accountBox = element.parentElement!.getBoundingClientRect();
+      const headerBox = element.closest("header")!.getBoundingClientRect();
+      const style = getComputedStyle(element);
+      return {
+        account: { left: accountBox.left, right: accountBox.right },
+        clipPath: style.clipPath,
+        header: { left: headerBox.left, right: headerBox.right },
+        overflow: style.overflow,
+        position: style.position,
+      };
+    });
+    await expect(label).toHaveAttribute("data-visually-hidden", "true");
+    expect(geometry.position).toBe("absolute");
+    expect(geometry.overflow).toBe("hidden");
+    expect(geometry.clipPath).toBe("inset(50%)");
+    expect(geometry.account.left).toBeGreaterThanOrEqual(geometry.header.left);
+    expect(geometry.account.right).toBeLessThanOrEqual(geometry.header.right);
+    await expectNoDocumentOverflow(page);
+  });
+}
+
+test("shows the complete long account name inside the mobile drawer", async ({ page }) => {
+  await page.setViewportSize({ height: 812, width: 375 });
+  await openReference(page);
+  await page.getByRole("button", { name: "Abrir navegación" }).click();
+  const drawer = page.getByRole("dialog", { name: "Navegación" });
+  const label = drawer.locator(".vrn-directory-header__account-label");
+  await label.evaluate((element, value) => { element.textContent = value; }, longAccountLabel);
+  await expect(label).toHaveText(longAccountLabel);
+  await expect(label).toBeVisible();
+
+  const geometry = await label.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      clientHeight: element.clientHeight,
+      clientWidth: element.clientWidth,
+      maxInlineSize: style.maxInlineSize,
+      overflow: style.overflow,
+      scrollHeight: element.scrollHeight,
+      scrollWidth: element.scrollWidth,
+      textOverflow: style.textOverflow,
+      whiteSpace: style.whiteSpace,
+    };
+  });
+  expect(geometry.whiteSpace).toBe("normal");
+  expect(geometry.maxInlineSize).toBe("none");
+  expect(geometry.overflow).toBe("visible");
+  expect(geometry.textOverflow).toBe("clip");
+  expect(geometry.scrollWidth).toBeLessThanOrEqual(geometry.clientWidth);
+  expect(geometry.scrollHeight).toBeLessThanOrEqual(geometry.clientHeight);
+  await expect.poll(() => drawer.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+  await expectNoDocumentOverflow(page);
 });
 
 for (const viewport of [
@@ -191,6 +278,25 @@ for (const viewport of [
     await expectVisibleFocus(trigger);
   });
 }
+
+test("keeps the mobile results rhythm and card body compact", async ({ page }) => {
+  await page.setViewportSize({ height: 812, width: 375 });
+  await openReference(page);
+  const card = page.locator(".vrn-directory-card").first();
+  const body = card.locator(".vrn-directory-card__body");
+  const cta = card.locator(".vrn-directory-card__cta");
+  const factRows = await card.locator(".vrn-directory-card__facts > *").evaluateAll((facts) => (
+    facts.map((fact) => fact.getBoundingClientRect().y)
+  ));
+  const geometry = await Promise.all([card.boundingBox(), body.boundingBox(), cta.boundingBox()]);
+
+  expect(geometry[0]?.y).toBeLessThanOrEqual(MOBILE_DENSITY_BUDGET.firstCardMaximumY);
+  expect(geometry[1]?.height).toBeLessThanOrEqual(MOBILE_DENSITY_BUDGET.cardBodyMaximumHeight);
+  expect(geometry[2]?.height).toBeGreaterThanOrEqual(MOBILE_DENSITY_BUDGET.interactiveTargetMinimumSize);
+  expect(Math.max(...factRows) - Math.min(...factRows))
+    .toBeLessThanOrEqual(MOBILE_DENSITY_BUDGET.factsRowMaximumVariance);
+  await expectMediaRatio(page);
+});
 
 for (const viewport of [
   { columns: 1, height: 812, width: 375 },

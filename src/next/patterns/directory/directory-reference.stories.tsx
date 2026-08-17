@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useMemo, useState, type FormEvent, type MouseEvent } from "react";
 import { NextButton, NextIconButton } from "../../components/actions";
-import { Heart } from "../../icons";
+import { Heart, X } from "../../icons";
 import {
   NextDirectoryBusinessCard,
   NextDirectoryCardGrid,
@@ -24,7 +24,7 @@ import type {
   VorealNextLinkProps,
 } from "./directory.types";
 
-const BUSINESS_IMAGES = "/voreal-next/directory";
+const BUSINESS_IMAGES = "./voreal-next/directory";
 
 const mobile375Viewport = {
   name: "Directory reference mobile 375",
@@ -192,7 +192,7 @@ function withMissingImages(items: readonly NextDirectoryBusiness[]): readonly Ne
 function Brand() {
   return (
     <a aria-label="Voreal, inicio" className="vrn-directory-reference__brand" href="/">
-      <img alt="" height="32" src="/voreal-next/brand/voreal-mark.png" width="32" />
+      <img alt="" height="32" src="./voreal-next/brand/voreal-mark.png" width="32" />
       <span>voreal</span>
     </a>
   );
@@ -256,6 +256,15 @@ function DirectoryReferenceStory({ mode = "cards" }: DirectoryReferenceStoryProp
     setLocationLabel(String(data.get("location") ?? "").trim() || "Tu ubicación");
     setPage(1);
     setMessage("Búsqueda actualizada.");
+  }
+
+  function clearSearchField(event: MouseEvent<HTMLButtonElement>, fieldName: "location" | "q") {
+    const field = event.currentTarget.form?.elements.namedItem(fieldName);
+    if (field instanceof HTMLInputElement) {
+      field.value = "";
+      field.focus();
+      setMessage(fieldName === "q" ? "Búsqueda limpiada." : "Ubicación limpiada.");
+    }
   }
 
   function toggleFavorite(id: string) {
@@ -358,13 +367,14 @@ function DirectoryReferenceStory({ mode = "cards" }: DirectoryReferenceStoryProp
         filters={filters}
         header={(
           <NextDirectoryHeader
-            accountLabel="MC"
+            accountAvatarLabel="MC"
+            accountLabel="Mi cuenta"
             brand={<Brand />}
             descriptor="Directorio de negocios latinos"
             navItems={[
               { href: "/para-negocios", label: "Para negocios" },
               { href: "/recursos", label: "Recursos" },
-              { href: "/favoritos", label: "Favoritos" },
+              { href: "/favoritos", icon: <Heart aria-hidden="true" className="vrn-icon" />, label: "Favoritos" },
             ]}
             primaryAction={{ href: "/listar-negocio", label: "Listar mi negocio" }}
           />
@@ -386,7 +396,28 @@ function DirectoryReferenceStory({ mode = "cards" }: DirectoryReferenceStoryProp
           <NextDirectorySearchForm
             action="/buscar"
             defaultValue={{ location: "Baltimore, MD", query: "restaurantes" }}
+            fieldIdPrefix="directory-reference-search"
+            locationTrailingAction={(
+              <NextIconButton
+                className="vrn-directory-search__clear"
+                label="Limpiar ubicación"
+                onClick={(event) => clearSearchField(event, "location")}
+                variant="ghost"
+              >
+                <X />
+              </NextIconButton>
+            )}
             onSubmit={submitSearch}
+            queryTrailingAction={(
+              <NextIconButton
+                className="vrn-directory-search__clear"
+                label="Limpiar búsqueda"
+                onClick={(event) => clearSearchField(event, "q")}
+                variant="ghost"
+              >
+                <X />
+              </NextIconButton>
+            )}
           />
         )}
       >

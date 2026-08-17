@@ -42,6 +42,14 @@ function TestImage(props: VorealNextImageProps) {
   return <img {...props} data-test-image="true" />;
 }
 
+function cssForSelector(document: Document, selector: string) {
+  return Array.from(document.styleSheets)
+    .flatMap((sheet) => Array.from(sheet.cssRules))
+    .filter((rule) => "selectorText" in rule && rule.selectorText === selector)
+    .map((rule) => rule.cssText)
+    .join(" ");
+}
+
 it("keeps the approved card anatomy and injected navigation/media adapters", () => {
   renderNext(
     <NextDirectoryBusinessCard
@@ -122,21 +130,35 @@ it("keeps favorite interaction outside the card link", () => {
   expect(favorite.minInlineSize).toBe("44px");
 });
 
-it("preserves the 3:2 media crop, wrapping name, two-line description and bottom CTA", () => {
-  renderNext(<NextDirectoryBusinessCard business={completeBusiness} />);
+it("preserves the 3:2 crop and compacts secondary content without shrinking actions", () => {
+  const { container } = renderNext(<NextDirectoryBusinessCard business={completeBusiness} />);
 
   const image = screen.getByRole("img", { name: "Oficina de Martínez Tax Services" });
   const media = image.parentElement!;
   const heading = screen.getByRole("heading", { name: "Martínez Tax Services" });
   const description = screen.getByText("Atención bilingüe para familias y pequeñas empresas.");
   const cta = screen.getByRole("link", { name: "Ver Martínez Tax Services" });
+  const bodyCss = cssForSelector(container.ownerDocument, ".vrn-directory-card__body");
+  const descriptionCss = cssForSelector(container.ownerDocument, ".vrn-directory-card__description");
+  const locationCss = cssForSelector(container.ownerDocument, ".vrn-directory-card__location");
+  const factsCss = cssForSelector(container.ownerDocument, ".vrn-directory-card__facts");
+  const ratingCss = cssForSelector(container.ownerDocument, ".vrn-directory-card__rating");
+  const badgeCss = cssForSelector(container.ownerDocument, ".vrn-directory-card__badge.vrn-badge");
 
   expect(getComputedStyle(media).aspectRatio).toBe("3 / 2");
   expect(getComputedStyle(media).overflow).toBe("hidden");
   expect(getComputedStyle(image).objectFit).toBe("cover");
+  expect(bodyCss).toContain("padding: var(--vrn-space-3)");
   expect(getComputedStyle(heading).whiteSpace).not.toBe("nowrap");
   expect(getComputedStyle(description).webkitLineClamp).toBe("2");
+  expect(descriptionCss).toContain("margin-block-start: var(--vrn-space-1)");
+  expect(locationCss).toContain("margin-block-start: var(--vrn-space-2)");
+  expect(factsCss).toContain("gap: var(--vrn-space-1)");
+  expect(factsCss).toContain("margin-block: var(--vrn-space-2) var(--vrn-space-3)");
+  expect(ratingCss).toContain("font-size: var(--vrn-font-size-xs)");
+  expect(badgeCss).toContain("font-size: var(--vrn-font-size-xs)");
   expect(getComputedStyle(cta).marginBlockStart).toBe("auto");
+  expect(getComputedStyle(cta).minBlockSize).toBe("44px");
 });
 
 it("allows every textual card row to wrap long content without widening the card", () => {

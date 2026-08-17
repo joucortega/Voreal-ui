@@ -24,6 +24,14 @@ it("gives a tag remove action a shared 44px minimum target", () => {
   expect(getComputedStyle(action).minInlineSize).toBe("44px");
 });
 
+it("centers the Lucide close icon inside the remove target", () => {
+  renderNext(<NextTag onRemove={() => undefined} removeLabel="Quitar filtro Restaurantes">Restaurantes</NextTag>);
+
+  const action = screen.getByRole("button", { name: "Quitar filtro Restaurantes" });
+  expect(getComputedStyle(action).justifyContent).toBe("center");
+  expect(action.querySelector("svg.vrn-icon")).toHaveAttribute("aria-hidden", "true");
+});
+
 it("has no detectable accessibility violations for Voreal Next controls", async () => {
   const { container } = renderNext(
     <form>

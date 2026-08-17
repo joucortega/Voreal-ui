@@ -7,12 +7,18 @@ export function NextDirectorySearchForm({
   action,
   className,
   defaultValue,
+  fieldIdPrefix,
   loading = false,
+  locationTrailingAction,
   locationLabel = "¿Dónde?",
+  queryTrailingAction,
   queryLabel = "¿Qué buscas?",
   submitLabel = "Buscar",
   ...props
 }: NextDirectorySearchFormProps) {
+  const queryId = `${fieldIdPrefix}-query`;
+  const locationId = `${fieldIdPrefix}-location`;
+
   return (
     <form
       {...props}
@@ -22,32 +28,36 @@ export function NextDirectorySearchForm({
       method="get"
       role="search"
     >
-      <label className="vrn-directory-search__field">
-        <span className="vrn-directory-search__label">{queryLabel}</span>
+      <div className="vrn-directory-search__field">
+        <label className="vrn-directory-search__label" htmlFor={queryId}>{queryLabel}</label>
         <span className="vrn-directory-search__control">
           <Search aria-hidden="true" className="vrn-icon vrn-directory-search__icon" />
           <input
             className="vrn-directory-search__input"
             defaultValue={defaultValue.query}
+            id={queryId}
             name="q"
             placeholder="Negocio, servicio o categoría"
             type="search"
           />
+          {queryTrailingAction ? <span className="vrn-directory-search__trailing">{queryTrailingAction}</span> : null}
         </span>
-      </label>
-      <label className="vrn-directory-search__field vrn-directory-search__field--location">
-        <span className="vrn-directory-search__label">{locationLabel}</span>
+      </div>
+      <div className="vrn-directory-search__field vrn-directory-search__field--location">
+        <label className="vrn-directory-search__label" htmlFor={locationId}>{locationLabel}</label>
         <span className="vrn-directory-search__control">
           <MapPin aria-hidden="true" className="vrn-icon vrn-directory-search__icon" />
           <input
             className="vrn-directory-search__input"
             defaultValue={defaultValue.location}
+            id={locationId}
             name="location"
             placeholder="Ciudad o código postal"
             type="text"
           />
+          {locationTrailingAction ? <span className="vrn-directory-search__trailing">{locationTrailingAction}</span> : null}
         </span>
-      </label>
+      </div>
       <button
         aria-busy={loading || undefined}
         className="vrn-directory-search__submit"

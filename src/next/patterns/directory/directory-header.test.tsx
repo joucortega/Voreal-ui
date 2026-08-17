@@ -3,12 +3,13 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { expect, it } from "vitest";
 import { renderVorealNext as renderNext } from "../../testing/render-voreal-next";
+import { Heart } from "../../icons";
 import { NextDirectoryHeader, type VorealNextLinkProps } from "./directory-header";
 
 const navigation = [
   { href: "/para-negocios", label: "Para negocios" },
   { href: "/recursos", label: "Recursos" },
-  { href: "/favoritos", label: "Favoritos" },
+  { href: "/favoritos", icon: <Heart className="vrn-icon" />, label: "Favoritos" },
 ] as const;
 
 function TestLink({ href, ...props }: VorealNextLinkProps) {
@@ -18,6 +19,7 @@ function TestLink({ href, ...props }: VorealNextLinkProps) {
 function HeaderFixture() {
   return (
     <NextDirectoryHeader
+      accountAvatarLabel="MC"
       accountLabel="Mi cuenta"
       brand={<span>voreal</span>}
       descriptor="Directorio de negocios latinos"
@@ -34,16 +36,38 @@ it("renders injected links and the complete approved navigation", () => {
   expect(screen.getByRole("banner")).toBeVisible();
   expect(screen.getByRole("link", { name: "Listar mi negocio" })).toHaveAttribute("data-test-link", "true");
   expect(screen.getByText("Directorio de negocios latinos")).toBeVisible();
-  expect(screen.getByText("Mi cuenta")).toBeVisible();
+  expect(screen.getByText("Mi cuenta")).toHaveAttribute("data-visually-hidden", "true");
   for (const item of navigation) {
     expect(screen.getByRole("link", { name: item.label })).toHaveAttribute("href", item.href);
   }
+  expect(screen.getByRole("link", { name: "Favoritos" }).querySelector("svg"))
+    .toHaveAttribute("aria-hidden", "true");
+  expect(screen.getByText("MC")).toHaveClass("vrn-directory-header__avatar");
+  expect(screen.getByText("Mi cuenta")).toHaveClass("vrn-directory-header__account-label");
+  expect(document.querySelectorAll(".vrn-directory-header__account-chevron")).toHaveLength(1);
   expect(within(screen.getByRole("navigation", { name: "Navegación principal" })).getAllByRole("link").map((link) => link.textContent)).toEqual([
     "Para negocios",
     "Listar mi negocio",
     "Recursos",
     "Favoritos",
   ]);
+});
+
+it("keeps an arbitrary account label visible when no avatar initials are supplied", () => {
+  const accountLabel = "Administración de la cuenta comunitaria";
+  renderNext(
+    <NextDirectoryHeader
+      accountLabel={accountLabel}
+      brand={<span>voreal</span>}
+      navItems={navigation}
+      primaryAction={{ href: "/listar", label: "Listar mi negocio" }}
+    />,
+  );
+
+  const label = screen.getByText(accountLabel);
+  expect(label).toHaveClass("vrn-directory-header__account-label");
+  expect(label).not.toHaveAttribute("data-visually-hidden");
+  expect(document.querySelector(".vrn-directory-header__avatar")).toBeNull();
 });
 
 it("uses native anchors by default", () => {

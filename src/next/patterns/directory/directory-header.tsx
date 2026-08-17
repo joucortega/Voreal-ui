@@ -1,4 +1,5 @@
 import { NextDirectoryMobileNav } from "./directory-mobile-nav";
+import { ChevronRight } from "../../icons";
 import type {
   NextDirectoryHeaderProps,
   NextDirectoryNavItem,
@@ -14,6 +15,7 @@ export type {
 } from "./directory.types";
 
 export function NextDirectoryHeader({
+  accountAvatarLabel,
   accountLabel,
   brand,
   descriptor,
@@ -37,7 +39,7 @@ export function NextDirectoryHeader({
           {remainingNavItems.map((item) => (
             <DirectoryLink key={item.href} LinkComponent={LinkComponent} item={item} />
           ))}
-          {accountLabel ? <span className="vrn-directory-header__account">{accountLabel}</span> : null}
+          {accountLabel ? <AccountIdentity avatarLabel={accountAvatarLabel} label={accountLabel} /> : null}
         </nav>
 
         <div className="vrn-directory-header__mobile-actions">
@@ -45,7 +47,7 @@ export function NextDirectoryHeader({
             {navItems.map((item) => (
               <DirectoryLink key={item.href} LinkComponent={LinkComponent} item={item} mobile />
             ))}
-            {accountLabel ? <span className="vrn-directory-mobile-nav__account">{accountLabel}</span> : null}
+            {accountLabel ? <AccountIdentity avatarLabel={accountAvatarLabel} label={accountLabel} mobile /> : null}
           </NextDirectoryMobileNav>
         </div>
       </div>
@@ -69,7 +71,25 @@ function DirectoryLink({ item, LinkComponent, mobile = false, primary = false }:
 
   return (
     <LinkComponent className={className} href={item.href}>
-      {item.label}
+      {item.icon ? <span className="vrn-directory-header__nav-icon">{item.icon}</span> : null}
+      <span>{item.label}</span>
     </LinkComponent>
+  );
+}
+
+function AccountIdentity({ avatarLabel, label, mobile = false }: { avatarLabel?: string; label: string; mobile?: boolean }) {
+  const visuallyHiddenLabel = Boolean(avatarLabel) && !mobile;
+
+  return (
+    <span className={mobile ? "vrn-directory-mobile-nav__account" : "vrn-directory-header__account"}>
+      {avatarLabel ? <span aria-hidden="true" className="vrn-directory-header__avatar">{avatarLabel}</span> : null}
+      <span
+        className="vrn-directory-header__account-label"
+        data-visually-hidden={visuallyHiddenLabel || undefined}
+      >
+        {label}
+      </span>
+      <ChevronRight aria-hidden="true" className="vrn-directory-header__account-chevron vrn-icon" />
+    </span>
   );
 }
