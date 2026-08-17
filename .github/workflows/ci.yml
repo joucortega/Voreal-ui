@@ -22,14 +22,28 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
       - run: pnpm test
       - run: pnpm test:a11y
       - run: pnpm typecheck
       - run: pnpm lint:css
       - run: pnpm audit:css
+      - run: pnpm audit:next-css
       - run: pnpm build
       - run: pnpm build-storybook
       - run: pnpm test:e2e
+      - run: pnpm test:e2e:next
+      - name: Upload Voreal Next Playwright diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: voreal-next-playwright-diagnostics
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
       - run: pnpm budget:css
       - run: pnpm budget:search-css
+      - run: pnpm budget:next-directory-css
+      - run: pnpm budget:next-css

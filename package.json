@@ -32,6 +32,10 @@
     "./patterns/directory/search-suggestions": "./src/patterns/directory/search/directory-search-suggestions.tsx",
     "./patterns/directory/search-state": "./src/patterns/directory/search/directory-search-state.ts",
     "./styles.css": "./src/styles/index.css",
+    "./next": "./src/next/index.ts",
+    "./next/styles.css": "./src/next/styles.css",
+    "./next/components/*": "./src/next/components/*/index.ts",
+    "./next/patterns/directory": "./src/next/patterns/directory/index.ts",
     "./theme/neutral.css": "./src/themes/neutral.css",
     "./theme/mercado-nocturno.css": "./src/themes/mercado-nocturno.css",
     "./theme/red-latina.css": "./src/themes/red-latina.css",
@@ -49,10 +53,14 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:e2e": "playwright test",
+    "test:e2e:next": "playwright test --config playwright.next.config.ts",
     "lint:css": "stylelint 'src/**/*.css'",
     "audit:css": "node scripts/audit-css.mjs",
+    "audit:next-css": "node scripts/audit-next-css.mjs src/next",
     "budget:css": "node scripts/check-css-budget.mjs",
-    "budget:search-css": "node scripts/check-css-budget.mjs src/patterns/directory/search/directory-search.css 3072"
+    "budget:search-css": "node scripts/check-css-budget.mjs src/patterns/directory/search/directory-search.css 3072",
+    "budget:next-css": "node scripts/check-css-budget.mjs src/next 24576",
+    "budget:next-directory-css": "node scripts/check-css-budget.mjs src/next/patterns/directory 8192"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",
@@ -74,6 +82,7 @@
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
+    "@babel/parser": "^7.29.8",
     "@changesets/cli": "^3.0.0",
     "@playwright/test": "1.62.1",
     "@storybook/addon-a11y": "^10.5.7",
@@ -88,6 +97,7 @@
     "axe-core": "^4.13.0",
     "jsdom": "^30.0.1",
     "playwright": "^1.62.1",
+    "postcss": "^8.5.26",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "storybook": "^10.5.7",

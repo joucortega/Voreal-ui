@@ -30,6 +30,7 @@
 - `StaticDataTable` server-safe y frontera cliente explícita para `DataTable` interactiva.
 - Iconografía SVG consistente y accesible basada en el lenguaje Lucide.
 - Tema `mercado-nocturno`, variante oscura de Mercado contemporáneo.
+- Voreal Next experimental: referencia opt-in y aislada del directorio de tarjetas, con estados responsive y validación cross-browser. No sustituye Voreal actual ni habilita una migración automática.
 
 ## 0.1.0 — 2026-08-13
 

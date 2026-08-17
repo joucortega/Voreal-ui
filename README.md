@@ -4,6 +4,8 @@ Voreal UI `0.2.0` es un sistema visual React reutilizable para directorios moder
 
 El paquete combina CSS encapsulado y tokens semánticos, Tailwind CSS v4 para utilidades acotadas, y Radix Primitives para interacción accesible. Incluye componentes base, patrones públicos de directorio y una superficie administrativa compacta.
 
+La nueva referencia de tarjetas se mantiene separada como [Voreal Next (experimental)](docs/VOREAL_NEXT.md) y requiere consumo opt-in; Voreal actual continúa siendo el valor predeterminado.
+
 ## Requisitos
 
 - React y React DOM `>=18.3 <20`.
@@ -223,10 +225,14 @@ pnpm test:a11y
 pnpm typecheck
 pnpm lint:css
 pnpm audit:css
+pnpm audit:next-css
 pnpm build
 pnpm build-storybook
 pnpm test:e2e
+pnpm test:e2e:next
 pnpm budget:search-css
+pnpm budget:next-directory-css
+pnpm budget:next-css
 pnpm budget:css
 ```
 
@@ -236,6 +242,7 @@ pnpm budget:css
 
 - [Temas](docs/THEMING.md)
 - [Integración con Next.js](docs/NEXTJS.md)
+- [Voreal Next (experimental)](docs/VOREAL_NEXT.md)
 - [Migración desde CSS heredado](docs/MIGRATION.md)
 - [Decisiones](DECISIONS.md)
 - [Especificación aprobada](docs/specs/voreal-ui-design.md)
