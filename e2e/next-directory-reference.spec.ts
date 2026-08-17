@@ -298,6 +298,55 @@ test("keeps the mobile results rhythm and card body compact", async ({ page }) =
   await expectMediaRatio(page);
 });
 
+test("keeps the results header compact and horizontally aligned at 1024", async ({ page }) => {
+  await page.setViewportSize({ height: 1100, width: 1024 });
+  await openReference(page);
+  const resultsHeader = page.locator(".vrn-directory-results");
+  const tagBoxes = await resultsHeader.locator(".vrn-tag").evaluateAll((tags) => tags.map((tag) => {
+    const box = tag.getBoundingClientRect();
+    return { height: box.height, y: box.y };
+  }));
+  const headerBox = await resultsHeader.boundingBox();
+
+  expect(headerBox?.height).toBeLessThanOrEqual(132);
+  expect(tagBoxes).toHaveLength(3);
+  expect(Math.max(...tagBoxes.map(({ y }) => y)) - Math.min(...tagBoxes.map(({ y }) => y)))
+    .toBeLessThanOrEqual(4);
+  await expectNoDocumentOverflow(page);
+});
+
+test("keeps mobile pagination in one row without shrinking neighbor targets", async ({ page }) => {
+  await page.setViewportSize({ height: 812, width: 375 });
+  await openReference(page);
+  const pagination = page.getByRole("navigation", { name: "Paginación" });
+  const first = pagination.locator('[aria-label="Primera página"]');
+  const previous = pagination.getByRole("link", { name: "Página anterior" });
+  const next = pagination.getByRole("link", { name: "Página siguiente" });
+  const last = pagination.locator('[aria-label="Última página"]');
+
+  await expect(first).toBeHidden();
+  await expect(last).toBeHidden();
+  await expect(previous).toBeVisible();
+  await expect(next).toBeVisible();
+  const visibleBoxes = await pagination.locator(
+    ".vrn-directory-pagination__control, .vrn-directory-pagination__page",
+  ).evaluateAll((controls) => controls.flatMap((control) => {
+    const style = getComputedStyle(control);
+    if (style.display === "none" || control.getClientRects().length === 0) return [];
+    const box = control.getBoundingClientRect();
+    return [{ height: box.height, width: box.width, y: box.y }];
+  }));
+  const neighborBoxes = await Promise.all([previous.boundingBox(), next.boundingBox()]);
+
+  expect(Math.max(...visibleBoxes.map(({ y }) => y)) - Math.min(...visibleBoxes.map(({ y }) => y)))
+    .toBeLessThanOrEqual(4);
+  for (const box of neighborBoxes) {
+    expect(box?.height).toBeGreaterThanOrEqual(44);
+    expect(box?.width).toBeGreaterThanOrEqual(44);
+  }
+  await expectNoDocumentOverflow(page);
+});
+
 for (const viewport of [
   { columns: 1, height: 812, width: 375 },
   { columns: 2, height: 1024, width: 768 },

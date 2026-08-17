@@ -431,6 +431,7 @@ function DirectoryReferenceStory({ mode = "cards" }: DirectoryReferenceStoryProp
 const meta = {
   title: "Next/Patterns/Directory Reference",
   component: DirectoryReferenceStory,
+  globals: { a11y: { manual: true } },
   parameters: { layout: "fullscreen" },
 } satisfies Meta<typeof DirectoryReferenceStory>;
 

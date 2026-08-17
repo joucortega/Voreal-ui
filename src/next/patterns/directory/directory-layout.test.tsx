@@ -116,6 +116,45 @@ it("keeps the mobile results rhythm and pagination visually compact", () => {
   expect(mobileCss).toMatch(/\.vrn-directory-results\s*\{[^}]*gap:\s*var\(--vrn-space-2\)/);
   expect(mobileCss).toMatch(/\.vrn-directory-results\s*\{[^}]*padding-block:\s*var\(--vrn-space-3\)/);
   expect(mobileCss).toMatch(/\.vrn-directory-results__filters-label,\s*\.vrn-directory-results__sort-label\s*\{[^}]*display:\s*none/);
+  expect(mobileCss).toMatch(/\.vrn-directory-results__tags\s*\{[^}]*display:\s*contents/);
+  expect(mobileCss).toMatch(/\.vrn-directory-pagination__control--boundary\s*\{[^}]*display:\s*none/);
+  expect(mobileCss).toMatch(/\.vrn-directory-pagination__control--neighbor\s+\.vrn-directory-pagination__label\s*\{[^}]*position:\s*absolute/);
+});
+
+it("uses the compact two-row results header before the desktop card breakpoint", () => {
+  const { container } = renderNext(<NextDirectoryCardGrid data-testid="grid" />);
+  const compactCss = cssForMediaCondition(container.ownerDocument, "(width < 75rem)");
+  const sidebarCss = cssForMediaCondition(container.ownerDocument, "(width < 64rem)");
+
+  expect(compactCss).toMatch(/\.vrn-directory-results\s*\{[^}]*gap:\s*var\(--vrn-space-2\)/);
+  expect(compactCss).toMatch(/\.vrn-directory-results\s*\{[^}]*grid-template-columns:\s*minmax\(0, 1fr\) auto/);
+  expect(compactCss).toMatch(/\.vrn-directory-results\s*\{[^}]*padding-block:\s*var\(--vrn-space-3\)/);
+  expect(compactCss).toMatch(/\.vrn-directory-results__filters\s*\{[^}]*grid-column:\s*1 \/ -1/);
+  expect(compactCss).toMatch(/\.vrn-directory-results__sort-label\s*\{[^}]*display:\s*none/);
+  expect(compactCss).not.toMatch(/\.vrn-directory-results__mobile-filter\s*\{[^}]*display:\s*block/);
+  expect(sidebarCss).toMatch(/\.vrn-directory-results__mobile-filter\s*\{[^}]*display:\s*block/);
+});
+
+it("marks pagination boundaries and neighbors without losing accessible names", () => {
+  renderNext(
+    <NextDirectoryPagination currentPage={2} getPageHref={(page) => `/pagina/${page}`} pageCount={5} />,
+  );
+
+  const first = screen.getByRole("link", { name: "Primera página" });
+  const previous = screen.getByRole("link", { name: "Página anterior" });
+  const next = screen.getByRole("link", { name: "Página siguiente" });
+  const last = screen.getByRole("link", { name: "Última página" });
+
+  expect(first).toHaveClass("vrn-directory-pagination__control--boundary");
+  expect(first).toHaveAttribute("data-pagination-control", "boundary");
+  expect(last).toHaveClass("vrn-directory-pagination__control--boundary");
+  expect(last).toHaveAttribute("data-pagination-control", "boundary");
+  expect(previous).toHaveClass("vrn-directory-pagination__control--neighbor");
+  expect(previous).toHaveAttribute("data-pagination-control", "neighbor");
+  expect(next).toHaveClass("vrn-directory-pagination__control--neighbor");
+  expect(next).toHaveAttribute("data-pagination-control", "neighbor");
+  expect(within(previous).getByText("Anterior")).toHaveClass("vrn-directory-pagination__label");
+  expect(within(next).getByText("Siguiente")).toHaveClass("vrn-directory-pagination__label");
 });
 
 it("uses crawlable page links, marks the current page and honors the link adapter", () => {

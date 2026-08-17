@@ -46,6 +46,8 @@ describe("Voreal Next directory reference stories", () => {
 
   it("publishes the exact visual review contract", () => {
     expect(meta.title).toBe("Next/Patterns/Directory Reference");
+    expect(preview.parameters?.a11y?.test).toBe("error");
+    expect(meta.globals?.a11y).toEqual({ manual: true });
     expect([Cards, Mobile375, Tablet768, Loading, NoResults, ErrorStory, LongContent, MissingImage])
       .toHaveLength(8);
     expect(Mobile375.parameters?.viewport?.defaultViewport).toBe("directory-reference-mobile-375");
