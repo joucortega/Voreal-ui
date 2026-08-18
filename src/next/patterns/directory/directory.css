@@ -903,6 +903,14 @@
     margin-inline-start: auto;
     min-inline-size: min(11rem, 100%);
   }
+
+  .vrn-directory-card__body {
+    padding-inline: var(--vrn-space-2);
+  }
+
+  .vrn-directory-card__badge.vrn-badge {
+    padding-inline: var(--vrn-space-1);
+  }
 }
 
 .vrn-directory-layout {

@@ -117,6 +117,8 @@ it("keeps the mobile results rhythm and pagination visually compact", () => {
   expect(mobileCss).toMatch(/\.vrn-directory-results\s*\{[^}]*padding-block:\s*var\(--vrn-space-3\)/);
   expect(mobileCss).toMatch(/\.vrn-directory-results__filters-label,\s*\.vrn-directory-results__sort-label\s*\{[^}]*display:\s*none/);
   expect(mobileCss).toMatch(/\.vrn-directory-results__tags\s*\{[^}]*display:\s*contents/);
+  expect(mobileCss).toMatch(/\.vrn-directory-card__body\s*\{[^}]*padding-inline:\s*var\(--vrn-space-2\)/);
+  expect(mobileCss).toMatch(/\.vrn-directory-card__badge\.vrn-badge\s*\{[^}]*padding-inline:\s*var\(--vrn-space-1\)/);
   expect(mobileCss).toMatch(/\.vrn-directory-pagination__control--boundary\s*\{[^}]*display:\s*none/);
   expect(mobileCss).toMatch(/\.vrn-directory-pagination__control--neighbor\s+\.vrn-directory-pagination__label\s*\{[^}]*position:\s*absolute/);
 });
