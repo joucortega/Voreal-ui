@@ -47,3 +47,17 @@ it("uses a control boundary with at least 3:1 contrast against the surface", () 
 
   expect(contrastRatio(controlBoundary, surface)).toBeGreaterThanOrEqual(3);
 });
+
+it("keeps inherited labels and portal content in the Voreal sans family", () => {
+  const { getByText } = render(
+    <>
+      <VorealNextRoot><label>Etiqueta del formulario</label></VorealNextRoot>
+      <div data-vrn-portal=""><label>Etiqueta del portal</label></div>
+    </>,
+  );
+
+  for (const label of [getByText("Etiqueta del formulario"), getByText("Etiqueta del portal")]) {
+    expect(getComputedStyle(label).fontFamily).toContain("var(--vrn-font-sans)");
+    expect(getComputedStyle(label).fontFamily).not.toContain("Times New Roman");
+  }
+});

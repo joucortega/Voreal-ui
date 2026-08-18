@@ -1,4 +1,6 @@
 :where([data-voreal-ui="next"], [data-vrn-portal]) {
+  font-family: var(--vrn-font-sans);
+
   --vrn-color-canvas: #f7f9fc;
   --vrn-color-surface: #fff;
   --vrn-color-surface-muted: #f1f4f8;
