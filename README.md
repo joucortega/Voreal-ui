@@ -4,6 +4,8 @@ Voreal UI `0.2.0` es un sistema visual React reutilizable para directorios moder
 
 El paquete combina CSS encapsulado y tokens semánticos, Tailwind CSS v4 para utilidades acotadas, y Radix Primitives para interacción accesible. Incluye componentes base, patrones públicos de directorio y una superficie administrativa compacta.
 
+El núcleo reusable de [Voreal Next (experimental)](docs/VOREAL_NEXT.md) se mantiene separado y requiere consumo opt-in. Publica familias de acciones, contenido, feedback, formularios, navegación, overlays y estado, además de la referencia del directorio; Voreal actual continúa siendo el valor predeterminado.
+
 ## Requisitos
 
 - React y React DOM `>=18.3 <20`.
@@ -215,6 +217,20 @@ import { BusinessCard, DirectorySearch } from "@voreal/ui/patterns/directory";
 import { AdminShell, PublicationStatus } from "@voreal/ui/patterns/admin";
 ```
 
+Voreal Next usa subrutas propias y una hoja de estilos aislada:
+
+```tsx
+import { VorealNextRoot } from "@voreal/ui/next";
+import { NextButton } from "@voreal/ui/next/components/actions";
+import "@voreal/ui/next/styles.css";
+
+export function PublishAction() {
+  return <VorealNextRoot><NextButton>Publicar negocio</NextButton></VorealNextRoot>;
+}
+```
+
+Consulta la guía de Voreal Next para temas CSS, módulos server-safe/client-only, adaptadores Link/Image y portales.
+
 ## Verificación
 
 ```bash
@@ -223,10 +239,15 @@ pnpm test:a11y
 pnpm typecheck
 pnpm lint:css
 pnpm audit:css
+pnpm audit:next-css
 pnpm build
 pnpm build-storybook
 pnpm test:e2e
+pnpm test:e2e:next
 pnpm budget:search-css
+pnpm budget:next-directory-css
+pnpm budget:next-components-css
+pnpm budget:next-css
 pnpm budget:css
 ```
 
@@ -236,6 +257,7 @@ pnpm budget:css
 
 - [Temas](docs/THEMING.md)
 - [Integración con Next.js](docs/NEXTJS.md)
+- [Voreal Next (experimental)](docs/VOREAL_NEXT.md)
 - [Migración desde CSS heredado](docs/MIGRATION.md)
 - [Decisiones](DECISIONS.md)
 - [Especificación aprobada](docs/specs/voreal-ui-design.md)

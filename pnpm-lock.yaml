@@ -60,6 +60,9 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
     devDependencies:
+      '@babel/parser':
+        specifier: ^7.29.8
+        version: 7.29.8
       '@changesets/cli':
         specifier: ^3.0.0
         version: 3.0.0
@@ -102,6 +105,9 @@ importers:
       playwright:
         specifier: ^1.62.1
         version: 1.62.1
+      postcss:
+        specifier: ^8.5.26
+        version: 8.5.26
       react:
         specifier: ^19.2.8
         version: 19.2.8

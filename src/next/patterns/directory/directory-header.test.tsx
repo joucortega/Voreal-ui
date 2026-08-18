@@ -1,0 +1,152 @@
+import { fireEvent, render, screen, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { axe } from "vitest-axe";
+import { expect, it } from "vitest";
+import { renderVorealNext as renderNext } from "../../testing/render-voreal-next";
+import { Heart } from "../../icons";
+import { VorealNextRoot } from "../../root";
+import { NextDirectoryHeader, type VorealNextLinkProps } from "./directory-header";
+
+const navigation = [
+  { href: "/para-negocios", label: "Para negocios" },
+  { href: "/recursos", label: "Recursos" },
+  { href: "/favoritos", icon: <Heart className="vrn-icon" />, label: "Favoritos" },
+] as const;
+
+function TestLink({ href, ...props }: VorealNextLinkProps) {
+  return <a {...props} data-test-link="true" href={href} />;
+}
+
+function HeaderFixture({ theme }: { theme?: string } = {}) {
+  return (
+    <NextDirectoryHeader
+      accountAvatarLabel="MC"
+      accountLabel="Mi cuenta"
+      brand={<span>voreal</span>}
+      descriptor="Directorio de negocios latinos"
+      LinkComponent={TestLink}
+      navItems={navigation}
+      primaryAction={{ href: "/listar", label: "Listar mi negocio" }}
+      theme={theme}
+    />
+  );
+}
+
+it("propagates an explicit directory theme through the header mobile navigation portal", async () => {
+  const themeStyle = document.createElement("style");
+  themeStyle.textContent = '[data-vrn-portal][data-vrn-theme="red-latina"] { --vrn-color-action: #7b2cbf; }';
+  document.head.append(themeStyle);
+
+  render(
+    <VorealNextRoot theme="red-latina">
+      <HeaderFixture theme="red-latina" />
+    </VorealNextRoot>,
+  );
+  await userEvent.click(screen.getByRole("button", { name: "Abrir navegación" }));
+
+  const portal = document.querySelector<HTMLElement>('[data-vrn-portal][data-vrn-theme="red-latina"]');
+  expect(portal).toContainElement(screen.getByRole("dialog", { name: "Navegación" }));
+  expect(getComputedStyle(portal!).getPropertyValue("--vrn-color-action").trim()).toBe("#7b2cbf");
+  themeStyle.remove();
+});
+
+it("renders injected links and the complete approved navigation", () => {
+  renderNext(<HeaderFixture />);
+
+  expect(screen.getByRole("banner")).toBeVisible();
+  expect(screen.getByRole("link", { name: "Listar mi negocio" })).toHaveAttribute("data-test-link", "true");
+  expect(screen.getByText("Directorio de negocios latinos")).toBeVisible();
+  expect(screen.getByText("Mi cuenta")).toHaveAttribute("data-visually-hidden", "true");
+  for (const item of navigation) {
+    expect(screen.getByRole("link", { name: item.label })).toHaveAttribute("href", item.href);
+  }
+  expect(screen.getByRole("link", { name: "Favoritos" }).querySelector("svg"))
+    .toHaveAttribute("aria-hidden", "true");
+  expect(screen.getByText("MC")).toHaveClass("vrn-directory-header__avatar");
+  expect(screen.getByText("Mi cuenta")).toHaveClass("vrn-directory-header__account-label");
+  expect(document.querySelectorAll(".vrn-directory-header__account-chevron")).toHaveLength(1);
+  expect(within(screen.getByRole("navigation", { name: "Navegación principal" })).getAllByRole("link").map((link) => link.textContent)).toEqual([
+    "Para negocios",
+    "Listar mi negocio",
+    "Recursos",
+    "Favoritos",
+  ]);
+});
+
+it("keeps an arbitrary account label visible when no avatar initials are supplied", () => {
+  const accountLabel = "Administración de la cuenta comunitaria";
+  renderNext(
+    <NextDirectoryHeader
+      accountLabel={accountLabel}
+      brand={<span>voreal</span>}
+      navItems={navigation}
+      primaryAction={{ href: "/listar", label: "Listar mi negocio" }}
+    />,
+  );
+
+  const label = screen.getByText(accountLabel);
+  expect(label).toHaveClass("vrn-directory-header__account-label");
+  expect(label).not.toHaveAttribute("data-visually-hidden");
+  expect(document.querySelector(".vrn-directory-header__avatar")).toBeNull();
+});
+
+it("uses native anchors by default", () => {
+  renderNext(
+    <NextDirectoryHeader
+      brand={<span>voreal</span>}
+      navItems={navigation}
+      primaryAction={{ href: "/listar", label: "Listar mi negocio" }}
+    />,
+  );
+
+  expect(screen.getByRole("link", { name: "Listar mi negocio" }).tagName).toBe("A");
+});
+
+it("opens a labelled mobile menu with the same links and restores focus when it closes", async () => {
+  const user = userEvent.setup();
+  renderNext(<HeaderFixture />);
+  const trigger = screen.getByRole("button", { name: "Abrir navegación" });
+
+  await user.click(trigger);
+
+  const dialog = screen.getByRole("dialog", { name: "Navegación" });
+  expect(dialog).toBeVisible();
+  for (const item of navigation) {
+    expect(within(dialog).getByRole("link", { name: item.label })).toHaveAttribute("href", item.href);
+  }
+
+  await user.click(screen.getByRole("button", { name: "Cerrar navegación" }));
+  expect(trigger).toHaveFocus();
+});
+
+it("has no detectable accessibility violations for Voreal Next header with its menu open", async () => {
+  const user = userEvent.setup();
+  renderNext(<HeaderFixture />);
+
+  await user.click(screen.getByRole("button", { name: "Abrir navegación" }));
+
+  const results = await axe(document.body, { rules: { "color-contrast": { enabled: false } } });
+  expect(results.violations).toEqual([]);
+});
+
+it("keeps tall mobile navigation scrollable without chaining to the locked page", async () => {
+  await import("./directory.css");
+  const longNavigation = Array.from({ length: 30 }, (_, index) => ({
+    href: `/enlace-${index + 1}`,
+    label: `Enlace ${index + 1}`,
+  }));
+  renderNext(
+    <NextDirectoryHeader
+      brand={<span>voreal</span>}
+      navItems={longNavigation}
+      primaryAction={{ href: "/listar", label: "Listar mi negocio" }}
+    />,
+  );
+
+  fireEvent.click(screen.getByRole("button", { hidden: true, name: "Abrir navegación" }));
+
+  const dialog = screen.getByRole("dialog", { name: "Navegación" });
+  expect(within(dialog).getByRole("link", { name: "Enlace 30" })).toBeVisible();
+  expect(getComputedStyle(dialog).overflowY).toBe("auto");
+  expect(getComputedStyle(dialog).overscrollBehavior).toBe("contain");
+});
