@@ -440,19 +440,23 @@ type Story = StoryObj<typeof meta>;
 
 export const Cards: Story = { render: () => <DirectoryReferenceStory /> };
 export const Mobile375: Story = {
-  globals: { viewport: "directory-reference-mobile-375" },
+  globals: {
+    viewport: { isRotated: false, value: "directory-reference-mobile-375" },
+  },
   parameters: {
     viewport: {
-      viewports: { "directory-reference-mobile-375": mobile375Viewport },
+      options: { "directory-reference-mobile-375": mobile375Viewport },
     },
   },
   render: () => <DirectoryReferenceStory />,
 };
 export const Tablet768: Story = {
-  globals: { viewport: "directory-reference-tablet-768" },
+  globals: {
+    viewport: { isRotated: false, value: "directory-reference-tablet-768" },
+  },
   parameters: {
     viewport: {
-      viewports: { "directory-reference-tablet-768": tablet768Viewport },
+      options: { "directory-reference-tablet-768": tablet768Viewport },
     },
   },
   render: () => <DirectoryReferenceStory />,

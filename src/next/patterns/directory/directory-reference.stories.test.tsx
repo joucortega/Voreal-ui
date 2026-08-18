@@ -50,11 +50,17 @@ describe("Voreal Next directory reference stories", () => {
     expect(meta.globals?.a11y).toEqual({ manual: true });
     expect([Cards, Mobile375, Tablet768, Loading, NoResults, ErrorStory, LongContent, MissingImage])
       .toHaveLength(8);
-    expect(Mobile375.globals?.viewport).toBe("directory-reference-mobile-375");
-    expect(Mobile375.parameters?.viewport?.viewports?.["directory-reference-mobile-375"]?.styles)
+    expect(Mobile375.globals?.viewport).toEqual({
+      isRotated: false,
+      value: "directory-reference-mobile-375",
+    });
+    expect(Mobile375.parameters?.viewport?.options?.["directory-reference-mobile-375"]?.styles)
       .toEqual({ height: "812px", width: "375px" });
-    expect(Tablet768.globals?.viewport).toBe("directory-reference-tablet-768");
-    expect(Tablet768.parameters?.viewport?.viewports?.["directory-reference-tablet-768"]?.styles)
+    expect(Tablet768.globals?.viewport).toEqual({
+      isRotated: false,
+      value: "directory-reference-tablet-768",
+    });
+    expect(Tablet768.parameters?.viewport?.options?.["directory-reference-tablet-768"]?.styles)
       .toEqual({ height: "1024px", width: "768px" });
   });
 
