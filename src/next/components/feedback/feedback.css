@@ -1,0 +1,75 @@
+.vrn-alert {
+  align-items: flex-start;
+  background: var(--vrn-color-action-soft);
+  border: 1px solid var(--vrn-color-action);
+  border-radius: var(--vrn-radius-card);
+  color: var(--vrn-color-ink);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vrn-space-3);
+  justify-content: space-between;
+  min-inline-size: 0;
+  padding: var(--vrn-space-4);
+}
+
+.vrn-alert[data-tone="success"] { background: var(--vrn-color-success-soft); border-color: var(--vrn-color-success); }
+.vrn-alert[data-tone="warning"] { background: var(--vrn-color-warning-soft); border-color: var(--vrn-color-warning); }
+.vrn-alert[data-tone="danger"] { background: var(--vrn-color-danger-soft); border-color: var(--vrn-color-danger); }
+.vrn-alert__body { display: grid; flex: 1 1 15rem; gap: var(--vrn-space-1); min-inline-size: 0; }
+.vrn-alert__title { font-weight: var(--vrn-font-weight-semibold); min-inline-size: 0; overflow-wrap: anywhere; }
+.vrn-alert__description { line-height: var(--vrn-line-height-normal); min-inline-size: 0; overflow-wrap: anywhere; }
+.vrn-alert__action { align-items: center; display: flex; min-block-size: 2.75rem; min-inline-size: 0; }
+.vrn-alert__action > :where(a, button) { align-items: center; display: inline-flex; justify-content: center; min-block-size: 2.75rem; min-inline-size: 2.75rem; }
+
+.vrn-progress { display: grid; gap: var(--vrn-space-2); min-inline-size: 0; }
+.vrn-progress__label { color: var(--vrn-color-ink); font-size: var(--vrn-font-size-sm); font-weight: var(--vrn-font-weight-semibold); min-inline-size: 0; overflow-wrap: anywhere; }
+.vrn-progress__native, .vrn-progress__track { background: var(--vrn-color-surface-muted); block-size: 0.5rem; border: 0; border-radius: var(--vrn-radius-control); inline-size: 100%; overflow: hidden; }
+.vrn-progress__native { appearance: none; display: block; }
+.vrn-progress__native::-webkit-progress-bar { background: var(--vrn-color-surface-muted); }
+.vrn-progress__native::-webkit-progress-value { background: var(--vrn-color-action); border-radius: var(--vrn-radius-control); }
+.vrn-progress__native::-moz-progress-bar { background: var(--vrn-color-action); border-radius: var(--vrn-radius-control); }
+.vrn-progress__track { position: relative; }
+
+.vrn-progress__indeterminate {
+  animation: vrn-progress-slide var(--vrn-duration-slow) ease-in-out infinite alternate;
+  background: var(--vrn-color-action);
+  block-size: 100%;
+  border-radius: inherit;
+  display: block;
+  inline-size: 40%;
+}
+
+.vrn-skeleton {
+  animation: vrn-skeleton-pulse calc(var(--vrn-duration-slow) * 5) ease-in-out infinite alternate;
+  background: var(--vrn-color-surface-muted);
+  block-size: var(--vrn-skeleton-height);
+  border-radius: var(--vrn-radius-control);
+  inline-size: var(--vrn-skeleton-width);
+  max-inline-size: 100%;
+}
+
+.vrn-empty-state { align-items: center; display: flex; flex-direction: column; gap: var(--vrn-space-3); min-inline-size: 0; padding: var(--vrn-space-6); text-align: center; }
+.vrn-empty-state__icon { align-items: center; color: var(--vrn-color-text-muted); display: inline-flex; justify-content: center; }
+.vrn-empty-state__icon > svg { block-size: 2rem; inline-size: 2rem; }
+.vrn-empty-state__title { color: var(--vrn-color-ink); font-size: var(--vrn-font-size-card); font-weight: var(--vrn-font-weight-semibold); min-inline-size: 0; overflow-wrap: anywhere; }
+.vrn-empty-state__description { color: var(--vrn-color-text-muted); line-height: var(--vrn-line-height-normal); max-inline-size: 40rem; min-inline-size: 0; overflow-wrap: anywhere; }
+.vrn-empty-state__action { align-items: center; display: flex; min-block-size: 2.75rem; min-inline-size: 0; }
+.vrn-empty-state__action > :where(a, button) { align-items: center; display: inline-flex; justify-content: center; min-block-size: 2.75rem; min-inline-size: 2.75rem; }
+
+@keyframes vrn-progress-slide {
+  from { transform: translateX(-10%); }
+  to { transform: translateX(160%); }
+}
+
+@keyframes vrn-skeleton-pulse {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vrn-progress__indeterminate, .vrn-skeleton { animation: none; }
+}
+
+@media (forced-colors: active) {
+  .vrn-alert, .vrn-progress__native, .vrn-progress__track, .vrn-skeleton { border: 1px solid CanvasText; }
+}

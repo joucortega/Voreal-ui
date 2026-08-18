@@ -1,9 +1,10 @@
-import { fireEvent, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { expect, it } from "vitest";
 import { renderVorealNext as renderNext } from "../../testing/render-voreal-next";
 import { Heart } from "../../icons";
+import { VorealNextRoot } from "../../root";
 import { NextDirectoryHeader, type VorealNextLinkProps } from "./directory-header";
 
 const navigation = [
@@ -16,7 +17,7 @@ function TestLink({ href, ...props }: VorealNextLinkProps) {
   return <a {...props} data-test-link="true" href={href} />;
 }
 
-function HeaderFixture() {
+function HeaderFixture({ theme }: { theme?: string } = {}) {
   return (
     <NextDirectoryHeader
       accountAvatarLabel="MC"
@@ -26,9 +27,28 @@ function HeaderFixture() {
       LinkComponent={TestLink}
       navItems={navigation}
       primaryAction={{ href: "/listar", label: "Listar mi negocio" }}
+      theme={theme}
     />
   );
 }
+
+it("propagates an explicit directory theme through the header mobile navigation portal", async () => {
+  const themeStyle = document.createElement("style");
+  themeStyle.textContent = '[data-vrn-portal][data-vrn-theme="red-latina"] { --vrn-color-action: #7b2cbf; }';
+  document.head.append(themeStyle);
+
+  render(
+    <VorealNextRoot theme="red-latina">
+      <HeaderFixture theme="red-latina" />
+    </VorealNextRoot>,
+  );
+  await userEvent.click(screen.getByRole("button", { name: "Abrir navegación" }));
+
+  const portal = document.querySelector<HTMLElement>('[data-vrn-portal][data-vrn-theme="red-latina"]');
+  expect(portal).toContainElement(screen.getByRole("dialog", { name: "Navegación" }));
+  expect(getComputedStyle(portal!).getPropertyValue("--vrn-color-action").trim()).toBe("#7b2cbf");
+  themeStyle.remove();
+});
 
 it("renders injected links and the complete approved navigation", () => {
   renderNext(<HeaderFixture />);

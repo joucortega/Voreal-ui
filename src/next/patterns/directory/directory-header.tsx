@@ -22,6 +22,7 @@ export function NextDirectoryHeader({
   LinkComponent = "a",
   navItems,
   primaryAction,
+  theme,
 }: NextDirectoryHeaderProps) {
   const [firstNavItem, ...remainingNavItems] = navItems;
 
@@ -43,7 +44,7 @@ export function NextDirectoryHeader({
         </nav>
 
         <div className="vrn-directory-header__mobile-actions">
-          <NextDirectoryMobileNav>
+          <NextDirectoryMobileNav theme={theme}>
             {navItems.map((item) => (
               <DirectoryLink key={item.href} LinkComponent={LinkComponent} item={item} mobile />
             ))}

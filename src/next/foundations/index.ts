@@ -3,12 +3,16 @@ export {
   NextContainer,
   NextDivider,
   NextGrid,
+  NextSection,
   NextStack,
+  NextSurface,
   type NextClusterProps,
   type NextContainerProps,
   type NextDividerProps,
   type NextGridProps,
+  type NextSectionProps,
   type NextStackProps,
+  type NextSurfaceProps,
 } from "./layout";
 export {
   NextCaption,

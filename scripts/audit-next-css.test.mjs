@@ -177,6 +177,41 @@ test("matches the minimum contract examples", () => {
   assert.deepEqual(findNextCssViolations("[data-vrn-portal] button { font: inherit; }", "reset.css"), []);
 });
 
+test("rejects raw declaration colors outside the token inventory", () => {
+  const source = `.vrn-button {
+  color: #0f5bde;
+  background: rgb(11 31 58 / 42%);
+  border-color: hsl(214 87% 46%);
+  content: "#not-a-color";
+}`;
+
+  assert.deepEqual(
+    findNextCssViolations(source, "src/next/components/actions/actions.css").map(({ id, match }) => ({ id, match })),
+    [
+      { id: "raw-color", match: "#0f5bde" },
+      { id: "raw-color", match: "rgb(11 31 58 / 42%)" },
+      { id: "raw-color", match: "hsl(214 87% 46%)" },
+    ],
+  );
+});
+
+test("ignores hex-shaped unquoted URL fragments while rejecting declaration colors", () => {
+  const source = `.vrn-icon { background: url(icon.svg#face); color: #0f5bde; }`;
+
+  assert.deepEqual(
+    findNextCssViolations(source, "src/next/components/actions/actions.css").map(({ id, match }) => ({ id, match })),
+    [{ id: "raw-color", match: "#0f5bde" }],
+  );
+});
+
+test("permits raw token values and ignores comments and strings", () => {
+  const source = `/* #0f5bde rgb(11 31 58 / 42%) hsl(214 87% 46%) */
+.vrn-copy::before { content: "#0f5bde rgb(11 31 58 / 42%) hsl(214 87% 46%)"; }
+:where([data-voreal-ui="next"]) { --vrn-color-action: #0f5bde; --vrn-color-overlay-scrim: rgb(11 31 58 / 42%); }`;
+
+  assert.deepEqual(findNextCssViolations(source, "src/next/styles/tokens.css"), []);
+});
+
 test("the filesystem audit rejects CSS omitted from the layered entry point", async (t) => {
   const root = await mkdtemp(path.join(tmpdir(), "voreal-next-css-audit-"));
   t.after(() => rm(root, { recursive: true, force: true }));

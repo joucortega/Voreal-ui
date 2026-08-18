@@ -1,3 +1,4 @@
+/* Public cascade contract: consumer layers belong after vrn-utilities. */
 @layer vrn-reset, vrn-tokens, vrn-components, vrn-patterns, vrn-utilities;
 
 @import "./styles/reset.css" layer(vrn-reset);
@@ -5,6 +6,10 @@
 @import "./foundations/foundations.css" layer(vrn-components);
 @import "./components/actions/actions.css" layer(vrn-components);
 @import "./components/forms/forms.css" layer(vrn-components);
+@import "./components/navigation/navigation.css" layer(vrn-components);
 @import "./components/status/status.css" layer(vrn-components);
+@import "./components/feedback/feedback.css" layer(vrn-components);
+@import "./components/content/content.css" layer(vrn-components);
+@import "./components/overlays/overlays.css" layer(vrn-components);
 @import "./patterns/directory/directory.css" layer(vrn-patterns);
 @import "./styles/accessibility.css" layer(vrn-utilities);

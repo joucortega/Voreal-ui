@@ -30,11 +30,20 @@ it("uses an opaque focus ring with at least 3:1 contrast on Next surfaces", () =
   const { getByTestId } = render(<VorealNextRoot data-testid="next-root" />);
   const styles = getComputedStyle(getByTestId("next-root"));
   const focusRing = styles.getPropertyValue("--vrn-focus-ring").trim();
-  const focusColor = focusRing.match(/#[a-f\d]{6}/i)?.[0];
+  const focusColor = styles.getPropertyValue("--vrn-color-focus").trim();
 
-  expect(focusColor).toBeDefined();
+  expect(focusRing).toContain("var(--vrn-color-focus)");
 
   for (const surface of ["--vrn-color-canvas", "--vrn-color-surface"]) {
-    expect(contrastRatio(focusColor!, styles.getPropertyValue(surface).trim())).toBeGreaterThanOrEqual(3);
+    expect(contrastRatio(focusColor, styles.getPropertyValue(surface).trim())).toBeGreaterThanOrEqual(3);
   }
+});
+
+it("uses a control boundary with at least 3:1 contrast against the surface", () => {
+  const { getByTestId } = render(<VorealNextRoot data-testid="next-root" />);
+  const styles = getComputedStyle(getByTestId("next-root"));
+  const controlBoundary = styles.getPropertyValue("--vrn-color-text-subtle").trim();
+  const surface = styles.getPropertyValue("--vrn-color-surface").trim();
+
+  expect(contrastRatio(controlBoundary, surface)).toBeGreaterThanOrEqual(3);
 });

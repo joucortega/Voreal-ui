@@ -35,6 +35,13 @@
     "./next": "./src/next/index.ts",
     "./next/styles.css": "./src/next/styles.css",
     "./next/components/*": "./src/next/components/*/index.ts",
+    "./next/components/actions": "./src/next/components/actions/index.ts",
+    "./next/components/content": "./src/next/components/content/index.ts",
+    "./next/components/feedback": "./src/next/components/feedback/index.ts",
+    "./next/components/forms": "./src/next/components/forms/index.ts",
+    "./next/components/navigation": "./src/next/components/navigation/index.ts",
+    "./next/components/overlays": "./src/next/components/overlays/index.ts",
+    "./next/components/status": "./src/next/components/status/index.ts",
     "./next/patterns/directory": "./src/next/patterns/directory/index.ts",
     "./theme/neutral.css": "./src/themes/neutral.css",
     "./theme/mercado-nocturno.css": "./src/themes/mercado-nocturno.css",
@@ -59,7 +66,8 @@
     "audit:next-css": "node scripts/audit-next-css.mjs src/next",
     "budget:css": "node scripts/check-css-budget.mjs",
     "budget:search-css": "node scripts/check-css-budget.mjs src/patterns/directory/search/directory-search.css 3072",
-    "budget:next-css": "node scripts/check-css-budget.mjs src/next 24576",
+    "budget:next-css": "node scripts/check-css-budget.mjs src/next 28672",
+    "budget:next-components-css": "node scripts/check-css-budget.mjs src/next/components 20480",
     "budget:next-directory-css": "node scripts/check-css-budget.mjs src/next/patterns/directory 8192"
   },
   "dependencies": {

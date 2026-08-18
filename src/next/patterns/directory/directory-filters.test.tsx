@@ -1,9 +1,11 @@
-import { screen, within } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useState, type ComponentProps } from "react";
 import { axe } from "vitest-axe";
 import { expect, it, vi } from "vitest";
 import { renderVorealNext as renderNext } from "../../testing/render-voreal-next";
+import { VorealNextRoot } from "../../root";
+import "../../components/overlays/overlays.css";
 import { NextDirectoryFilterDrawer } from "./directory-filter-drawer";
 import { NextDirectoryFilterPanel } from "./directory-filter-panel";
 import type { NextDirectoryFilterValue } from "./directory.types";
@@ -51,7 +53,10 @@ function FilterDrawerFixture({
   onApply,
   onClear,
   resultCount = 124,
-}: Partial<Pick<ComponentProps<typeof NextDirectoryFilterDrawer>, "onApply" | "onClear" | "resultCount">>) {
+  theme,
+}: Partial<Pick<ComponentProps<typeof NextDirectoryFilterDrawer>, "onApply" | "onClear" | "resultCount">> & {
+  theme?: string;
+}) {
   const [value, setValue] = useState(initialValue);
 
   return (
@@ -62,10 +67,29 @@ function FilterDrawerFixture({
       onClear={onClear}
       onValueChange={setValue}
       resultCount={resultCount}
+      theme={theme}
       value={value}
     />
   );
 }
+
+it("propagates an explicit directory theme to the filter drawer portal", async () => {
+  const themeStyle = document.createElement("style");
+  themeStyle.textContent = '[data-vrn-portal][data-vrn-theme="red-latina"] { --vrn-color-action: #7b2cbf; }';
+  document.head.append(themeStyle);
+
+  render(
+    <VorealNextRoot theme="red-latina">
+      <FilterDrawerFixture theme="red-latina" />
+    </VorealNextRoot>,
+  );
+  await userEvent.click(screen.getByRole("button", { name: "Abrir filtros" }));
+
+  const portal = document.querySelector<HTMLElement>('[data-vrn-portal][data-vrn-theme="red-latina"]');
+  expect(portal).toContainElement(screen.getByRole("dialog", { name: "Filtros" }));
+  expect(getComputedStyle(portal!).getPropertyValue("--vrn-color-action").trim()).toBe("#7b2cbf");
+  themeStyle.remove();
+});
 
 it("updates one immutable filter value from the desktop panel", async () => {
   const user = userEvent.setup();
@@ -119,9 +143,13 @@ it("renders the same filters visibly inside a portalled mobile drawer", async ()
   await user.click(screen.getByRole("button", { name: "Abrir filtros" }));
 
   const dialog = screen.getByRole("dialog", { name: "Filtros" });
+  const portal = document.querySelector("[data-vrn-portal]");
   expect(dialog).toBeVisible();
-  expect(dialog).toHaveAttribute("data-vrn-portal");
-  expect(document.querySelector(".vrn-directory-filter-drawer__overlay")).toHaveAttribute("data-vrn-portal");
+  expect(dialog).toHaveClass("vrn-dialog__content");
+  expect(dialog).toHaveAttribute("data-side", "bottom");
+  expect(dialog).toHaveAttribute("data-variant", "drawer");
+  expect(portal).toContainElement(dialog);
+  expect(portal?.querySelector(".vrn-dialog__overlay")).toBeInTheDocument();
   expect(within(dialog).getByRole("group", { name: "Categoría" })).toBeVisible();
   expect(within(dialog).getByRole("combobox", { name: "Distancia" })).toBeVisible();
   expect(within(dialog).getByRole("option", { name: "25 millas" })).toBeVisible();
@@ -175,8 +203,8 @@ it("keeps drawer content scrollable with a sticky action footer", async () => {
   await userEvent.click(screen.getByRole("button", { name: "Abrir filtros" }));
 
   const dialog = screen.getByRole("dialog", { name: "Filtros" });
-  const body = dialog.querySelector(".vrn-directory-filter-drawer__body");
-  const footer = dialog.querySelector(".vrn-directory-filter-drawer__footer");
+  const body = dialog.querySelector(".vrn-dialog__body");
+  const footer = dialog.querySelector(".vrn-dialog__footer");
   expect(getComputedStyle(dialog).maxBlockSize).not.toBe("none");
   expect(getComputedStyle(body! as Element).overflowY).toBe("auto");
   expect(getComputedStyle(body! as Element).overscrollBehavior).toBe("contain");

@@ -1,5 +1,15 @@
 import clsx from "clsx";
-import { cloneElement, forwardRef, isValidElement, type ButtonHTMLAttributes, type ReactElement, type ReactNode } from "react";
+import {
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type HTMLAttributes,
+  type ReactElement,
+  type ReactNode,
+} from "react";
+import type { VorealNextRefLinkComponent } from "../../adapters";
 import { LoaderCircle } from "../../icons";
 
 export type NextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -13,6 +23,16 @@ export type NextButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 export type NextIconButtonProps = Omit<NextButtonProps, "aria-label" | "children"> & {
   label: string;
   children: ReactNode;
+};
+export type NextButtonGroupProps = HTMLAttributes<HTMLDivElement> & {
+  attached?: boolean;
+  label: string;
+};
+export type NextActionLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
+  href: string;
+  LinkComponent?: VorealNextRefLinkComponent;
+  variant?: NextButtonProps["variant"];
+  size?: NextButtonProps["size"];
 };
 
 function normalizeIcon(icon: ReactNode): ReactNode {
@@ -52,5 +72,54 @@ export const NextIconButton = forwardRef<HTMLButtonElement, NextIconButtonProps>
     <NextButton {...props} ref={ref} aria-label={label} className={clsx("vrn-icon-button", className)}>
       {normalizeIcon(children)}
     </NextButton>
+  );
+});
+
+export const NextButtonGroup = forwardRef<HTMLDivElement, NextButtonGroupProps>(function NextButtonGroup(
+  { attached = false, className, label, ...props },
+  ref,
+): ReactElement {
+  return (
+    <div
+      {...props}
+      ref={ref}
+      aria-label={label}
+      className={clsx("vrn-button-group", className)}
+      data-attached={attached || undefined}
+      role="group"
+    />
+  );
+});
+
+export const NextActionLink = forwardRef<HTMLAnchorElement, NextActionLinkProps>(function NextActionLink(
+  { LinkComponent, className, size = "md", variant = "primary", href, ...props },
+  ref,
+): ReactElement {
+  const linkClassName = clsx("vrn-button", "vrn-action-link", className);
+
+  if (LinkComponent) {
+    const Link = LinkComponent;
+
+    return (
+      <Link
+        {...props}
+        ref={ref}
+        className={linkClassName}
+        data-size={size}
+        data-variant={variant}
+        href={href}
+      />
+    );
+  }
+
+  return (
+    <a
+      {...props}
+      ref={ref}
+      className={linkClassName}
+      data-size={size}
+      data-variant={variant}
+      href={href}
+    />
   );
 });

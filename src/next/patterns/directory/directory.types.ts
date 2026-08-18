@@ -1,10 +1,17 @@
-import type { AnchorHTMLAttributes, ElementType, FormHTMLAttributes, ImgHTMLAttributes, ReactNode } from "react";
+import type { FormHTMLAttributes, ReactNode } from "react";
+import type {
+  VorealNextImageComponent,
+  VorealNextImageProps,
+  VorealNextLinkComponent,
+  VorealNextLinkProps,
+} from "../../adapters";
 
-export type VorealNextLinkProps = Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
-  href: string;
-};
-
-export type VorealNextLinkComponent = ElementType<VorealNextLinkProps>;
+export type {
+  VorealNextImageComponent,
+  VorealNextImageProps,
+  VorealNextLinkComponent,
+  VorealNextLinkProps,
+} from "../../adapters";
 
 export type NextDirectoryNavItem = {
   href: string;
@@ -20,6 +27,7 @@ export type NextDirectoryHeaderProps = {
   LinkComponent?: VorealNextLinkComponent;
   navItems: readonly NextDirectoryNavItem[];
   primaryAction: NextDirectoryNavItem;
+  theme?: string;
 };
 
 export type NextDirectorySearchValue = {
@@ -88,19 +96,8 @@ export type NextDirectoryFilterDrawerProps = NextDirectoryFilterPanelProps & {
   onApply?: () => void;
   onClear?: () => void;
   resultCount: number;
+  theme?: string;
 };
-
-export type VorealNextImageProps = Pick<
-  ImgHTMLAttributes<HTMLImageElement>,
-  "alt" | "className" | "height" | "loading" | "sizes" | "src" | "width"
-> & {
-  alt: string;
-  height: number;
-  src: string;
-  width: number;
-};
-
-export type VorealNextImageComponent = ElementType<VorealNextImageProps>;
 
 export type NextDirectoryImage = {
   alt: string;

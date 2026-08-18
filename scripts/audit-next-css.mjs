@@ -140,6 +140,49 @@ function zIndexFindings(source, file) {
   return violations;
 }
 
+function maskUrlContents(source) {
+  const output = [...source];
+
+  for (let index = 0; index < source.length; index += 1) {
+    if (index > 0 && /[\w-]/.test(source[index - 1])) continue;
+    const functionMatch = source.slice(index).match(/^url\s*\(/i);
+    if (!functionMatch) continue;
+
+    let depth = 0;
+    let end = index + functionMatch[0].length - 1;
+    for (; end < source.length; end += 1) {
+      if (source[end] === "(") depth += 1;
+      else if (source[end] === ")" && --depth === 0) {
+        end += 1;
+        break;
+      }
+    }
+    for (let position = index; position < end; position += 1) {
+      if (source[position] !== "\n" && source[position] !== "\r") output[position] = " ";
+    }
+    index = end - 1;
+  }
+
+  return output.join("");
+}
+
+function rawColorFindings(source, file) {
+  const normalizedFile = file.replaceAll("\\", "/");
+  if (normalizedFile === "tokens.css" || normalizedFile.endsWith("/styles/tokens.css")) return [];
+
+  const violations = [];
+  const root = postcss.parse(source, { from: file });
+  root.walkDecls((declaration) => {
+    const value = maskUrlContents(maskNonCode(declaration.value));
+    const valueStart = source.indexOf(declaration.value, declaration.source.start.offset);
+    for (const match of value.matchAll(/#[a-f\d]{3,8}\b|\b(?:rgb|hsl)a?\s*\([^)]*\)/gi)) {
+      const index = valueStart + match.index;
+      violations.push(finding(source, file, "raw-color", source.slice(index, index + match[0].length), index));
+    }
+  });
+  return violations;
+}
+
 function importantFindings(source, masked, file) {
   const violations = [];
   for (let index = 0; index < masked.length; index += 1) {
@@ -395,6 +438,7 @@ export function findNextCssViolations(source, file = "<inline>") {
     ...namespaceFindings(source, masked, file),
     ...importantFindings(source, masked, file),
     ...zIndexFindings(source, file),
+    ...rawColorFindings(source, file),
     ...selectorFindings(source, masked, file),
     ...layerFindings(source, masked, file),
   ];

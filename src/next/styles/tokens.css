@@ -2,18 +2,35 @@
   --vrn-color-canvas: #f7f9fc;
   --vrn-color-surface: #fff;
   --vrn-color-surface-muted: #f1f4f8;
+  --vrn-color-surface-raised: #fff;
   --vrn-color-ink: #0b1f3a;
   --vrn-color-text-muted: #5d6b82;
+  --vrn-color-text-subtle: #7f8999;
   --vrn-color-border: #dde3ec;
   --vrn-color-border-strong: #bac4d2;
-  --vrn-color-primary: #0f5bde;
-  --vrn-color-primary-hover: #0a47b8;
-  --vrn-color-primary-soft: #eaf1ff;
+  --vrn-color-action: #0f5bde;
+  --vrn-color-action-hover: #0a47b8;
+  --vrn-color-action-active: #083d9c;
+  --vrn-color-action-soft: #eaf1ff;
+  --vrn-color-on-action: #fff;
+  --vrn-color-focus: #0f5bde;
   --vrn-color-success: #237b4b;
   --vrn-color-success-soft: #e8f5ed;
   --vrn-color-warning: #946200;
+  --vrn-color-warning-soft: #fff4d6;
   --vrn-color-danger: #b42318;
-  --vrn-color-clay: #c4512f;
+  --vrn-color-danger-soft: #fdecea;
+  --vrn-color-info: #c4512f;
+  --vrn-color-info-soft: #fceee9;
+
+  --vrn-color-control-boundary: var(--vrn-color-text-subtle);
+  --vrn-color-primary: var(--vrn-color-action);
+  --vrn-color-primary-hover: var(--vrn-color-action-hover);
+  --vrn-color-primary-soft: var(--vrn-color-action-soft);
+  --vrn-color-clay: var(--vrn-color-info);
+  --vrn-color-overlay-scrim: rgb(11 31 58 / 42%);
+  --vrn-shadow-overlay-side: -0.5rem 0 1.5rem rgb(11 31 58 / 12%);
+  --vrn-shadow-overlay-bottom: 0 -0.5rem 1.5rem rgb(11 31 58 / 12%);
 
   --vrn-space-0: 0;
   --vrn-space-1: 0.25rem;
@@ -47,7 +64,7 @@
   --vrn-duration-fast: 120ms;
   --vrn-duration-default: 180ms;
   --vrn-duration-slow: 240ms;
-  --vrn-focus-ring: 0 0 0 3px #0f5bde;
+  --vrn-focus-ring: 0 0 0 3px var(--vrn-color-focus);
 
   --vrn-layer-base: 0;
   --vrn-layer-raised: 1;

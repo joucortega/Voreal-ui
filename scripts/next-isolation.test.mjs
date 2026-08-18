@@ -187,6 +187,13 @@ test("exposes Voreal Next only through opt-in subpaths", async () => {
   assert.equal(pkg.exports["./next"], "./src/next/index.ts");
   assert.equal(pkg.exports["./next/styles.css"], "./src/next/styles.css");
   assert.equal(pkg.exports["./next/components/*"], "./src/next/components/*/index.ts");
+  assert.equal(pkg.exports["./next/components/actions"], "./src/next/components/actions/index.ts");
+  assert.equal(pkg.exports["./next/components/content"], "./src/next/components/content/index.ts");
+  assert.equal(pkg.exports["./next/components/feedback"], "./src/next/components/feedback/index.ts");
+  assert.equal(pkg.exports["./next/components/forms"], "./src/next/components/forms/index.ts");
+  assert.equal(pkg.exports["./next/components/navigation"], "./src/next/components/navigation/index.ts");
+  assert.equal(pkg.exports["./next/components/overlays"], "./src/next/components/overlays/index.ts");
+  assert.equal(pkg.exports["./next/components/status"], "./src/next/components/status/index.ts");
   assert.equal(pkg.exports["./next/patterns/directory"], "./src/next/patterns/directory/index.ts");
 });
 
